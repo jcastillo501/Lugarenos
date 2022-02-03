@@ -17,6 +17,7 @@ class _ViewMainState extends State<ViewMain> {
   late double screenHeigth;
   late double screenWidth;
   bool firstEnter = false;
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -171,15 +172,36 @@ class _ViewMainState extends State<ViewMain> {
                   ),
                 ),
                 Container(
-                  height: screenHeigth * 0.3,
+                  // margin: EdgeInsets.all(12.0),
+                  height: screenHeigth * 0.5,
                   width: screenWidth,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       Container(
-                        decoration: BoxDecoration(color: Colors.red),
-                        child: Column(
-                          children: [Text('sss')],
+                        decoration: BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(50)),
+                        height: screenHeigth * 0.36,
+                        width: screenWidth * 0.45,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(50),
+                          child: Stack(children: [
+                            Container(
+                                child: Image.network(placesList[0].photo)),
+                            Positioned(
+                              bottom: screenHeigth * 0.02,
+                              child: Container(
+                                decoration: BoxDecoration(color: Colors.white),
+                                child: Text(
+                                  placesList[0].name + ' ',
+                                  style: TextStyle(
+                                      fontSize: (screenWidth * 0.032),
+                                      color: const Color(0xFF033236)),
+                                ),
+                              ),
+                            )
+                          ]),
                         ),
                       ),
                       Container(
@@ -188,12 +210,35 @@ class _ViewMainState extends State<ViewMain> {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             Container(
+                                width: screenWidth * 0.06,
                                 height: screenHeigth * 0.1,
-                                decoration: BoxDecoration(color: Colors.green),
-                                padding:
-                                    EdgeInsets.only(bottom: screenHeigth * 0.1),
-                                child: Text('-ssssssss')),
-                            Container(child: Text('dssdd'))
+                                child: Image.network(placesList[1].photo)),
+                            Positioned(
+                                bottom: screenHeigth * 0.02,
+                                child: Container(
+                                    decoration:
+                                        BoxDecoration(color: Colors.white),
+                                    child: Text(
+                                      placesList[1].name + ' ',
+                                      style: TextStyle(
+                                          fontSize: (screenWidth * 0.032),
+                                          color: const Color(0xFF033236)),
+                                    ))),
+                            Container(
+                                width: screenWidth * 0.06,
+                                height: screenHeigth * 0.1,
+                                child: Image.network(placesList[2].photo)),
+                            Positioned(
+                                bottom: screenHeigth * 0.02,
+                                child: Container(
+                                    decoration:
+                                        BoxDecoration(color: Colors.white),
+                                    child: Text(
+                                      placesList[2].name + ' ',
+                                      style: TextStyle(
+                                          fontSize: (screenWidth * 0.032),
+                                          color: const Color(0xFF033236)),
+                                    ))),
                           ],
                         ),
                       )
@@ -222,62 +267,67 @@ class _ViewMainState extends State<ViewMain> {
                       scrollDirection: Axis.horizontal,
                       itemCount: placesList.length,
                       itemBuilder: (BuildContext contex, int index) {
-                        return Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(50),
-                          ),
-                          margin: EdgeInsets.only(
-                              left: (index == 0)
-                                  ? screenWidth * 0.04
-                                  : screenWidth * 0.07,
-                              bottom: screenHeigth * 0.03),
-                          child: Stack(
-                            children: [
-                              ClipRRect(
+                        return (index > 2)
+                            ? Container(
+                                decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(50),
-                                  child:
-                                      Image.network(placesList[index].photo)),
-                              Positioned(
-                                bottom: screenHeigth * 0.02,
-                                right: screenWidth * 0.04,
-                                left: screenWidth * 0.01,
-                                child: Container(
-                                  padding: EdgeInsets.only(
-                                      left: screenWidth * 0.1,
-                                      right: screenWidth * 0.1,
-                                      top: screenHeigth * 0.01),
-                                  margin: EdgeInsets.only(
+                                ),
+                                margin: EdgeInsets.only(
+                                    left: (index == 0)
+                                        ? screenWidth * 0.04
+                                        : screenWidth * 0.07,
+                                    bottom: screenHeigth * 0.03),
+                                child: Stack(
+                                  children: [
+                                    ClipRRect(
+                                        borderRadius: BorderRadius.circular(50),
+                                        child: Image.network(
+                                            placesList[index].photo)),
+                                    Positioned(
+                                      bottom: screenHeigth * 0.02,
+                                      right: screenWidth * 0.04,
                                       left: screenWidth * 0.01,
-                                      right: screenWidth * 0.01),
-                                  width: screenWidth,
-                                  height: screenHeigth * 0.06,
-                                  decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(25)),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        placesList[index].name + ' ',
-                                        style: TextStyle(
-                                            fontSize: (screenWidth * 0.032),
-                                            color: const Color(0xFF033236)),
-                                      ),
-                                      Text(
-                                        placesList[index].address,
-                                        style: const TextStyle(
-                                          fontSize: (8.0),
-                                          color: Colors.amber,
+                                      child: Container(
+                                        padding: EdgeInsets.only(
+                                            left: screenWidth * 0.1,
+                                            right: screenWidth * 0.1,
+                                            top: screenHeigth * 0.01),
+                                        margin: EdgeInsets.only(
+                                            left: screenWidth * 0.01,
+                                            right: screenWidth * 0.01),
+                                        width: screenWidth,
+                                        height: screenHeigth * 0.06,
+                                        decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(15)),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              placesList[index].name + ' ',
+                                              style: TextStyle(
+                                                  fontSize:
+                                                      (screenWidth * 0.032),
+                                                  color:
+                                                      const Color(0xFF033236)),
+                                            ),
+                                            Text(
+                                              placesList[index].address,
+                                              style: const TextStyle(
+                                                fontSize: (8.0),
+                                                color: Colors.amber,
+                                              ),
+                                            )
+                                          ],
                                         ),
-                                      )
-                                    ],
-                                  ),
+                                      ),
+                                    )
+                                  ],
                                 ),
                               )
-                            ],
-                          ),
-                        );
+                            : const SizedBox();
                       }),
                 )
               ],
@@ -298,9 +348,10 @@ class _ViewMainState extends State<ViewMain> {
       for (Map<String, dynamic> item in decoded['places']) {
         Place dt = Place.fromMap(item);
         placesList.add(dt);
-
-        print(dt.category);
       }
+      print(placesList);
+      placesList.sort((a, b) => b.rate.compareTo(a.rate));
+      print(placesList);
     } else {
       print('upps');
     }
