@@ -171,80 +171,10 @@ class _ViewMainState extends State<ViewMain> {
                         color: const Color(0xFF033236)),
                   ),
                 ),
-                Container(
-                  // margin: EdgeInsets.all(12.0),
-                  height: screenHeigth * 0.5,
-                  width: screenWidth,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                            color: Colors.red,
-                            borderRadius: BorderRadius.circular(50)),
-                        height: screenHeigth * 0.36,
-                        width: screenWidth * 0.45,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(50),
-                          child: Stack(children: [
-                            Container(
-                                child: Image.network(placesList[0].photo)),
-                            Positioned(
-                              bottom: screenHeigth * 0.02,
-                              child: Container(
-                                decoration: BoxDecoration(color: Colors.white),
-                                child: Text(
-                                  placesList[0].name + ' ',
-                                  style: TextStyle(
-                                      fontSize: (screenWidth * 0.032),
-                                      color: const Color(0xFF033236)),
-                                ),
-                              ),
-                            )
-                          ]),
-                        ),
-                      ),
-                      Container(
-                        decoration: BoxDecoration(color: Colors.blue),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Container(
-                                width: screenWidth * 0.06,
-                                height: screenHeigth * 0.1,
-                                child: Image.network(placesList[1].photo)),
-                            Positioned(
-                                bottom: screenHeigth * 0.02,
-                                child: Container(
-                                    decoration:
-                                        BoxDecoration(color: Colors.white),
-                                    child: Text(
-                                      placesList[1].name + ' ',
-                                      style: TextStyle(
-                                          fontSize: (screenWidth * 0.032),
-                                          color: const Color(0xFF033236)),
-                                    ))),
-                            Container(
-                                width: screenWidth * 0.06,
-                                height: screenHeigth * 0.1,
-                                child: Image.network(placesList[2].photo)),
-                            Positioned(
-                                bottom: screenHeigth * 0.02,
-                                child: Container(
-                                    decoration:
-                                        BoxDecoration(color: Colors.white),
-                                    child: Text(
-                                      placesList[2].name + ' ',
-                                      style: TextStyle(
-                                          fontSize: (screenWidth * 0.032),
-                                          color: const Color(0xFF033236)),
-                                    ))),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                ),
+                //-------------------------------------------------//
+                //Container de imagenes destacadas**
+                //------------------------------------------------//
+                buildPopularPlaces(),
 
                 Padding(
                   padding: EdgeInsets.symmetric(
@@ -260,7 +190,7 @@ class _ViewMainState extends State<ViewMain> {
 
                 Container(
                   // color: Colors.blue,
-                  height: screenHeigth * 0.46,
+                  height: screenHeigth * 0.40,
                   width: screenWidth,
                   child: ListView.builder(
                       physics: const BouncingScrollPhysics(),
@@ -270,7 +200,7 @@ class _ViewMainState extends State<ViewMain> {
                         return (index > 2)
                             ? Container(
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50),
+                                  borderRadius: BorderRadius.circular(30),
                                 ),
                                 margin: EdgeInsets.only(
                                     left: (index == 0)
@@ -280,7 +210,7 @@ class _ViewMainState extends State<ViewMain> {
                                 child: Stack(
                                   children: [
                                     ClipRRect(
-                                        borderRadius: BorderRadius.circular(50),
+                                        borderRadius: BorderRadius.circular(30),
                                         child: Image.network(
                                             placesList[index].photo)),
                                     Positioned(
@@ -338,6 +268,100 @@ class _ViewMainState extends State<ViewMain> {
     );
   }
 
+  Widget buildPopularPlaces() {
+    return (placesList.isNotEmpty)
+        ? Container(
+            color: Colors.blue,
+            height: screenHeigth * 0.5,
+            width: screenWidth,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  margin: EdgeInsets.only(
+                    left: screenWidth * 0.04,
+                  ),
+                  height: screenHeigth * 0.4,
+                  width: screenWidth * 0.4,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(0),
+                      color: Colors.lime),
+                  // child: Positioned(
+                  //   bottom: screenHeigth * 0.3,
+                  //   child: Container(
+                  //     decoration: BoxDecoration(color: Colors.white),
+                  //     child: Text(
+                  //       placesList[0].name + ' ',
+                  //       style: TextStyle(
+                  //           fontSize: (screenWidth * 0.032),
+                  //           color: const Color(0xFF033236)),
+                  //     ),
+                  //   ),
+                  // ),
+                  child: Image.network(
+                    placesList[1].photo,
+                    // height: screenHeigth * 0.6,
+                    // width: screenWidth * 0.07,
+                  ),
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: screenWidth * 0.04,
+                      height: screenHeigth * 0.05,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50)),
+                      // margin:
+                      //     EdgeInsets.only(bottom: screenHeigth * 0.02),
+
+                      child: Stack(
+                        children: [
+                          ClipRRect(
+                              borderRadius: BorderRadius.circular(50),
+                              child: Image.network(placesList[1].photo)),
+                          Positioned(
+                              bottom: screenHeigth * 0.02,
+                              child: Container(
+                                  decoration:
+                                      BoxDecoration(color: Colors.white),
+                                  child: Text(
+                                    placesList[1].name + ' ',
+                                    style: TextStyle(
+                                        fontSize: (screenWidth * 0.032),
+                                        color: const Color(0xFF033236)),
+                                  ))),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      width: screenWidth * 0.04,
+                      height: screenHeigth * 0.1,
+                      child: Stack(
+                        children: [
+                          ClipRRect(child: Image.network(placesList[2].photo)),
+                          Positioned(
+                              bottom: screenHeigth * 0.1,
+                              child: Container(
+                                  decoration:
+                                      BoxDecoration(color: Colors.white),
+                                  child: Text(
+                                    placesList[2].name + ' ',
+                                    style: TextStyle(
+                                        fontSize: (screenWidth * 0.032),
+                                        color: const Color(0xFF033236)),
+                                  ))),
+                        ],
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          )
+        : const SizedBox();
+  }
+
   Future<void> getPlaces() async {
     Uri url = Uri.parse(
         'https://us-central1-domi-test-d4e69.cloudfunctions.net/getPlacesTest');
@@ -349,9 +373,9 @@ class _ViewMainState extends State<ViewMain> {
         Place dt = Place.fromMap(item);
         placesList.add(dt);
       }
-      print(placesList);
+
       placesList.sort((a, b) => b.rate.compareTo(a.rate));
-      print(placesList);
+      setState(() {});
     } else {
       print('upps');
     }
