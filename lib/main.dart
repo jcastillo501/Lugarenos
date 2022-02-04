@@ -8,7 +8,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(fontFamily: 'AmazingSlabTrial-Bold'),
+      // theme: ThemeData(fontFamily: 'AmazingSlabTrial-Bold'),
       title: 'Lugareños',
       home: ViewMain(),
     );

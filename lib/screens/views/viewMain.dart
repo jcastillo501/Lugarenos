@@ -293,34 +293,33 @@ class _ViewMainState extends State<ViewMain> {
                         ),
                       ),
                       Positioned(
-                        bottom: screenHeigth * 0.02,
-                        right: screenWidth * 0.04,
-                        left: screenWidth * 0.01,
+                        left: screenWidth * 0.02,
+                        right: screenWidth * 0.02,
+                        bottom: screenHeigth * 0.01,
                         child: Container(
                           padding: EdgeInsets.only(
-                              left: screenWidth * 0.1,
-                              right: screenWidth * 0.1,
-                              top: screenHeigth * 0.01),
-                          margin: EdgeInsets.only(
-                              left: screenWidth * 0.01,
-                              right: screenWidth * 0.01),
+                              left: screenWidth * 0.04,
+                              right: screenWidth * 0.02,
+                              top: screenHeigth * 0.01,
+                              bottom: screenHeigth * 0.01),
                           width: screenWidth,
-                          height: screenHeigth * 0.06,
                           decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(15)),
                           child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                placesList[0].name + ' ',
+                                placesList[1].name + ' ',
                                 style: TextStyle(
-                                    fontSize: (screenWidth * 0.036),
+                                    overflow: TextOverflow.ellipsis,
+                                    fontSize: (screenWidth * 0.029),
                                     color: const Color(0xFF033236)),
                               ),
                               Text(
-                                placesList[0].address,
+                                placesList[1].address,
                                 style: TextStyle(
-                                    fontSize: (screenWidth * 0.013),
+                                    fontSize: (screenWidth * 0.020),
                                     color: const Color(0xFFFCA772)),
                               )
                             ],
@@ -331,7 +330,7 @@ class _ViewMainState extends State<ViewMain> {
                   ),
                 ),
                 Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(
@@ -350,100 +349,102 @@ class _ViewMainState extends State<ViewMain> {
                                 fit: BoxFit.fill,
                               )),
                           Positioned(
-                              bottom: screenHeigth * 0.02,
-                              child: Container(
-                                  padding: EdgeInsets.only(
-                                      left: screenWidth * 0.04,
-                                      right: screenWidth * 0.12,
-                                      top: screenHeigth * 0.01),
-                                  margin: EdgeInsets.only(
-                                      left: screenWidth * 0.009,
-                                      right: screenWidth * 0.01),
-                                  // width: screenWidth,
-                                  height: screenHeigth * 0.05,
-                                  decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(15)),
-                                  child: Column(
-                                    children: [
-                                      Text(
-                                        placesList[1].name + ' ',
-                                        style: TextStyle(
-                                            fontSize: (screenWidth * 0.025),
-                                            color: const Color(0xFF033236)),
-                                      ),
-                                      Text(
-                                        placesList[1].address,
-                                        style: TextStyle(
-                                            fontSize: (screenWidth * 0.013),
-                                            color: const Color(0xFFFCA772)),
-                                      )
-                                    ],
-                                  ))),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30)),
-                      padding: EdgeInsets.only(right: screenWidth * 0.05),
-                      width: screenWidth * 0.45,
-                      height: screenHeigth * 0.22,
-                      child: Stack(
-                        fit: StackFit.expand,
-                        children: [
-                          ClipRRect(
-                              borderRadius: BorderRadius.circular(30),
-                              child: Image.network(
-                                placesList[2].photo,
-                                fit: BoxFit.fill,
-                              )),
-                          Positioned(
+                            left: screenWidth * 0.02,
+                            right: screenWidth * 0.02,
                             bottom: screenHeigth * 0.01,
-                            child: Stack(
-                              children: [
-                                Container(
-                                  padding: EdgeInsets.only(
-                                      left: screenWidth * 0.04,
-                                      right: screenWidth * 0.12,
-                                      top: screenHeigth * 0.02),
-                                  margin: EdgeInsets.only(
-                                      left: screenWidth * 0.009,
-                                      right: screenWidth * 0.01),
-                                  // width: screenWidth,
-                                  height: screenHeigth * 0.05,
-                                  decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(15)),
-                                  child: Column(
-                                    children: [
-                                      Text(
-                                        placesList[2].name + ' ',
-                                        style: TextStyle(
-                                            fontSize: (screenWidth * 0.022),
-                                            color: const Color(0xFF033236)),
-                                      ),
-                                      Text(
-                                        placesList[2].address,
-                                        style: TextStyle(
-                                            fontSize: (screenWidth * 0.013),
-                                            color: const Color(0xFFFCA772)),
-                                      )
-                                    ],
+                            child: Container(
+                              padding: EdgeInsets.only(
+                                  left: screenWidth * 0.04,
+                                  right: screenWidth * 0.02,
+                                  top: screenHeigth * 0.01,
+                                  bottom: screenHeigth * 0.01),
+                              width: screenWidth,
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(15)),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    placesList[1].name + ' ',
+                                    style: TextStyle(
+                                        overflow: TextOverflow.ellipsis,
+                                        fontSize: (screenWidth * 0.029),
+                                        color: const Color(0xFF033236)),
                                   ),
-                                ),
-                              ],
+                                  Text(
+                                    placesList[1].address,
+                                    style: TextStyle(
+                                        fontSize: (screenWidth * 0.020),
+                                        color: const Color(0xFFFCA772)),
+                                  )
+                                ],
+                              ),
                             ),
                           ),
                         ],
                       ),
                     ),
+                    panelDeInformacion(),
                   ],
                 )
               ],
             ),
           )
         : const SizedBox();
+  }
+
+  Container panelDeInformacion() {
+    return Container(
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
+      padding: EdgeInsets.only(right: screenWidth * 0.05),
+      width: screenWidth * 0.45,
+      height: screenHeigth * 0.22,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          ClipRRect(
+              borderRadius: BorderRadius.circular(30),
+              child: Image.network(
+                placesList[2].photo,
+                fit: BoxFit.fill,
+              )),
+          Positioned(
+            left: screenWidth * 0.02,
+            right: screenWidth * 0.02,
+            bottom: screenHeigth * 0.01,
+            child: Container(
+              padding: EdgeInsets.only(
+                  left: screenWidth * 0.04,
+                  right: screenWidth * 0.02,
+                  top: screenHeigth * 0.01,
+                  bottom: screenHeigth * 0.01),
+              width: screenWidth,
+              decoration: BoxDecoration(
+                  color: Colors.white, borderRadius: BorderRadius.circular(15)),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    placesList[2].name + ' ',
+                    style: TextStyle(
+                        overflow: TextOverflow.ellipsis,
+                        fontSize: (screenWidth * 0.029),
+                        color: const Color(0xFF033236)),
+                  ),
+                  Text(
+                    placesList[2].address,
+                    style: TextStyle(
+                        fontSize: (screenWidth * 0.020),
+                        color: const Color(0xFFFCA772)),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Future<void> getPlaces() async {
