@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -271,86 +270,171 @@ class _ViewMainState extends State<ViewMain> {
   Widget buildPopularPlaces() {
     return (placesList.isNotEmpty)
         ? Container(
-            color: Colors.blue,
-            height: screenHeigth * 0.5,
+            height: screenHeigth * 0.45,
             width: screenWidth,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              // mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Container(
-                  margin: EdgeInsets.only(
-                    left: screenWidth * 0.04,
-                  ),
-                  height: screenHeigth * 0.4,
-                  width: screenWidth * 0.4,
+                  margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+                  height: screenHeigth * 0.45,
+                  width: screenWidth * 0.45,
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(0),
+                      borderRadius: BorderRadius.circular(30),
                       color: Colors.lime),
-                  // child: Positioned(
-                  //   bottom: screenHeigth * 0.3,
-                  //   child: Container(
-                  //     decoration: BoxDecoration(color: Colors.white),
-                  //     child: Text(
-                  //       placesList[0].name + ' ',
-                  //       style: TextStyle(
-                  //           fontSize: (screenWidth * 0.032),
-                  //           color: const Color(0xFF033236)),
-                  //     ),
-                  //   ),
-                  // ),
-                  child: Image.network(
-                    placesList[1].photo,
-                    // height: screenHeigth * 0.6,
-                    // width: screenWidth * 0.07,
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: <Widget>[
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(30),
+                        child: Image.network(
+                          placesList[0].photo,
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                      Positioned(
+                        bottom: screenHeigth * 0.02,
+                        right: screenWidth * 0.04,
+                        left: screenWidth * 0.01,
+                        child: Container(
+                          padding: EdgeInsets.only(
+                              left: screenWidth * 0.1,
+                              right: screenWidth * 0.1,
+                              top: screenHeigth * 0.01),
+                          margin: EdgeInsets.only(
+                              left: screenWidth * 0.01,
+                              right: screenWidth * 0.01),
+                          width: screenWidth,
+                          height: screenHeigth * 0.06,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(15)),
+                          child: Column(
+                            children: [
+                              Text(
+                                placesList[0].name + ' ',
+                                style: TextStyle(
+                                    fontSize: (screenWidth * 0.036),
+                                    color: const Color(0xFF033236)),
+                              ),
+                              Text(
+                                placesList[0].address,
+                                style: TextStyle(
+                                    fontSize: (screenWidth * 0.013),
+                                    color: const Color(0xFFFCA772)),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(
-                      width: screenWidth * 0.04,
-                      height: screenHeigth * 0.05,
+                      padding: EdgeInsets.only(right: screenWidth * 0.05),
+                      width: screenWidth * 0.45,
+                      height: screenHeigth * 0.22,
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(50)),
-                      // margin:
-                      //     EdgeInsets.only(bottom: screenHeigth * 0.02),
-
+                          borderRadius: BorderRadius.circular(30)),
                       child: Stack(
+                        fit: StackFit.expand,
                         children: [
                           ClipRRect(
-                              borderRadius: BorderRadius.circular(50),
-                              child: Image.network(placesList[1].photo)),
+                              borderRadius: BorderRadius.circular(30),
+                              child: Image.network(
+                                placesList[1].photo,
+                                fit: BoxFit.fill,
+                              )),
                           Positioned(
                               bottom: screenHeigth * 0.02,
                               child: Container(
-                                  decoration:
-                                      BoxDecoration(color: Colors.white),
-                                  child: Text(
-                                    placesList[1].name + ' ',
-                                    style: TextStyle(
-                                        fontSize: (screenWidth * 0.032),
-                                        color: const Color(0xFF033236)),
+                                  padding: EdgeInsets.only(
+                                      left: screenWidth * 0.04,
+                                      right: screenWidth * 0.12,
+                                      top: screenHeigth * 0.01),
+                                  margin: EdgeInsets.only(
+                                      left: screenWidth * 0.009,
+                                      right: screenWidth * 0.01),
+                                  // width: screenWidth,
+                                  height: screenHeigth * 0.05,
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(15)),
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        placesList[1].name + ' ',
+                                        style: TextStyle(
+                                            fontSize: (screenWidth * 0.025),
+                                            color: const Color(0xFF033236)),
+                                      ),
+                                      Text(
+                                        placesList[1].address,
+                                        style: TextStyle(
+                                            fontSize: (screenWidth * 0.013),
+                                            color: const Color(0xFFFCA772)),
+                                      )
+                                    ],
                                   ))),
                         ],
                       ),
                     ),
                     Container(
-                      width: screenWidth * 0.04,
-                      height: screenHeigth * 0.1,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30)),
+                      padding: EdgeInsets.only(right: screenWidth * 0.05),
+                      width: screenWidth * 0.45,
+                      height: screenHeigth * 0.22,
                       child: Stack(
+                        fit: StackFit.expand,
                         children: [
-                          ClipRRect(child: Image.network(placesList[2].photo)),
+                          ClipRRect(
+                              borderRadius: BorderRadius.circular(30),
+                              child: Image.network(
+                                placesList[2].photo,
+                                fit: BoxFit.fill,
+                              )),
                           Positioned(
-                              bottom: screenHeigth * 0.1,
-                              child: Container(
-                                  decoration:
-                                      BoxDecoration(color: Colors.white),
-                                  child: Text(
-                                    placesList[2].name + ' ',
-                                    style: TextStyle(
-                                        fontSize: (screenWidth * 0.032),
-                                        color: const Color(0xFF033236)),
-                                  ))),
+                            bottom: screenHeigth * 0.01,
+                            child: Stack(
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.only(
+                                      left: screenWidth * 0.04,
+                                      right: screenWidth * 0.12,
+                                      top: screenHeigth * 0.02),
+                                  margin: EdgeInsets.only(
+                                      left: screenWidth * 0.009,
+                                      right: screenWidth * 0.01),
+                                  // width: screenWidth,
+                                  height: screenHeigth * 0.05,
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(15)),
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        placesList[2].name + ' ',
+                                        style: TextStyle(
+                                            fontSize: (screenWidth * 0.022),
+                                            color: const Color(0xFF033236)),
+                                      ),
+                                      Text(
+                                        placesList[2].address,
+                                        style: TextStyle(
+                                            fontSize: (screenWidth * 0.013),
+                                            color: const Color(0xFFFCA772)),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                     ),
