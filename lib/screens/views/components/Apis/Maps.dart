@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:lugarenos/screens/screenInfo/InfoPlaces.dart';
-import 'package:lugarenos/screens/screenInfo/infoPlaces.dart' as infoplaces;
 
 class Maps extends StatefulWidget {
   const Maps({Key? key}) : super(key: key);
@@ -14,24 +13,17 @@ class _MapsState extends State<Maps> {
   late GoogleMapController _controller;
   @override
   Widget build(BuildContext context) {
+    double screenWidht = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       body: SizedBox(
-        child: Column(
-          children: [
-            GoogleMap(
-                onMapCreated: initController,
-                initialCameraPosition: const CameraPosition(
-                    target: LatLng(-13.6574511, -69.7145414))),
-            // Container(
-
-            //   child: Column(
-            //     children: [],
-            //   ),
-            // )
-          ],
-        ),
-        height: 400,
-        width: 300,
+        width: screenWidht,
+        height: screenHeight,
+        child: GoogleMap(
+            onMapCreated: initController,
+            initialCameraPosition:
+                const CameraPosition(target: (LatLng(4.5981, -74.0799)))),
       ),
     );
   }
