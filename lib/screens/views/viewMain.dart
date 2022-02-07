@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:lugarenos/screens/screenInfo/InfoPlaces.dart';
+import 'package:lugarenos/screens/screenInfo/infoPlaces.dart' as infoplaces;
 import 'package:lugarenos/screens/views/components/Apis/place.dart';
 
 class ViewMain extends StatefulWidget {
@@ -74,7 +76,7 @@ class _ViewMainState extends State<ViewMain> {
                                             color: Colors.white),
                                         shape: RoundedRectangleBorder(
                                             borderRadius:
-                                                BorderRadius.circular(18.0))),
+                                                BorderRadius.circular(10.0))),
                                     onPressed: () {},
                                     child: const Text('Iniciar Sesión')),
                               ),
@@ -95,7 +97,7 @@ class _ViewMainState extends State<ViewMain> {
                                   child: Text(
                                     'Encuentra\nlos mejores\nlugares de\nLa ciudad',
                                     style:
-                                        TextStyle(fontSize: screenWidth * 0.06),
+                                        TextStyle(fontSize: screenWidth * 0.08),
                                   ),
                                 ),
                                 Padding(
@@ -108,24 +110,30 @@ class _ViewMainState extends State<ViewMain> {
                             ),
                             Padding(
                               padding: EdgeInsets.only(
-                                  right: screenWidth * 0.43,
-                                  top: screenHeigth * 0.04),
+                                  right: screenWidth * 0.50,
+                                  bottom: screenHeigth * 0.04,
+                                  top: screenHeigth * 0.02),
                               child: Text(
                                 'Que estas bucando hoy?',
                                 textAlign: TextAlign.left,
-                                style: TextStyle(fontSize: screenWidth * 0.025),
+                                style: TextStyle(fontSize: screenWidth * 0.035),
                               ),
                             ),
                             Container(
+                              margin: EdgeInsets.symmetric(
+                                  horizontal: screenWidth * 0.056),
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  border: Border.all(color: Colors.grey)),
+                                  borderRadius: BorderRadius.circular(15),
+                                  border: Border.all(color: Colors.grey),
+                                  color: Colors.white),
                               padding: EdgeInsets.symmetric(
-                                  horizontal: screenWidth * 0.10),
+                                  horizontal: screenWidth * 0.04),
                               child: TextFormField(
                                 // textAlign: TextAlign.center,
                                 decoration: const InputDecoration(
-                                    icon: Icon(Icons.zoom_in)),
+                                    icon: Icon(
+                                  Icons.zoom_in,
+                                )),
                               ),
                             )
                           ],
@@ -197,63 +205,78 @@ class _ViewMainState extends State<ViewMain> {
                       itemCount: placesList.length,
                       itemBuilder: (BuildContext contex, int index) {
                         return (index > 2)
-                            ? Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(30),
-                                ),
-                                margin: EdgeInsets.only(
-                                    left: (index == 0)
-                                        ? screenWidth * 0.04
-                                        : screenWidth * 0.07,
-                                    bottom: screenHeigth * 0.03),
-                                child: Stack(
-                                  children: [
-                                    ClipRRect(
-                                        borderRadius: BorderRadius.circular(30),
-                                        child: Image.network(
-                                            placesList[index].photo)),
-                                    Positioned(
-                                      bottom: screenHeigth * 0.02,
-                                      right: screenWidth * 0.04,
-                                      left: screenWidth * 0.01,
-                                      child: Container(
-                                        padding: EdgeInsets.only(
-                                            left: screenWidth * 0.1,
-                                            right: screenWidth * 0.1,
-                                            top: screenHeigth * 0.01),
-                                        margin: EdgeInsets.only(
-                                            left: screenWidth * 0.01,
-                                            right: screenWidth * 0.01),
-                                        width: screenWidth,
-                                        height: screenHeigth * 0.06,
-                                        decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius:
-                                                BorderRadius.circular(15)),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              placesList[index].name + ' ',
-                                              style: TextStyle(
-                                                  fontSize:
-                                                      (screenWidth * 0.032),
-                                                  color:
-                                                      const Color(0xFF033236)),
-                                            ),
-                                            Text(
-                                              placesList[index].address,
-                                              style: const TextStyle(
-                                                fontSize: (8.0),
-                                                color: Colors.amber,
-                                              ),
-                                            )
-                                          ],
-                                        ),
+                            ? GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (_) => InfoPlaces(
+                                        placeInfo: placesList[index],
                                       ),
-                                    )
-                                  ],
+                                    ),
+                                  );
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
+                                  margin: EdgeInsets.only(
+                                      left: (index == 0)
+                                          ? screenWidth * 0.04
+                                          : screenWidth * 0.07,
+                                      bottom: screenHeigth * 0.03),
+                                  child: Stack(
+                                    children: [
+                                      Hero(
+                                        tag: placesList[index].id,
+                                        child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(30),
+                                            child: Image.network(
+                                                placesList[index].photo)),
+                                      ),
+                                      Positioned(
+                                        bottom: screenHeigth * 0.02,
+                                        right: screenWidth * 0.04,
+                                        left: screenWidth * 0.01,
+                                        child: Container(
+                                          padding: EdgeInsets.only(
+                                              left: screenWidth * 0.1,
+                                              right: screenWidth * 0.1,
+                                              top: screenHeigth * 0.01),
+                                          margin: EdgeInsets.only(
+                                              left: screenWidth * 0.01,
+                                              right: screenWidth * 0.01),
+                                          width: screenWidth,
+                                          height: screenHeigth * 0.06,
+                                          decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(15)),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                placesList[index].name + ' ',
+                                                style: TextStyle(
+                                                    fontSize:
+                                                        (screenWidth * 0.032),
+                                                    color: const Color(
+                                                        0xFF033236)),
+                                              ),
+                                              Text(
+                                                placesList[index].address,
+                                                style: const TextStyle(
+                                                  fontSize: (8.0),
+                                                  color: Colors.amber,
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 ),
                               )
                             : const SizedBox();
@@ -273,116 +296,138 @@ class _ViewMainState extends State<ViewMain> {
             height: screenHeigth * 0.45,
             width: screenWidth,
             child: Row(
-              // mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
-                  height: screenHeigth * 0.45,
-                  width: screenWidth * 0.45,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
-                      color: Colors.lime),
-                  child: Stack(
-                    fit: StackFit.expand,
-                    children: <Widget>[
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(30),
-                        child: Image.network(
-                          placesList[0].photo,
-                          fit: BoxFit.fill,
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => InfoPlaces(
+                          placeInfo: placesList[0],
                         ),
                       ),
-                      Positioned(
-                        left: screenWidth * 0.02,
-                        right: screenWidth * 0.02,
-                        bottom: screenHeigth * 0.01,
-                        child: Container(
-                          padding: EdgeInsets.only(
-                              left: screenWidth * 0.04,
-                              right: screenWidth * 0.02,
-                              top: screenHeigth * 0.01,
-                              bottom: screenHeigth * 0.01),
-                          width: screenWidth,
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(15)),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                placesList[1].name + ' ',
-                                style: TextStyle(
-                                    overflow: TextOverflow.ellipsis,
-                                    fontSize: (screenWidth * 0.029),
-                                    color: const Color(0xFF033236)),
-                              ),
-                              Text(
-                                placesList[1].address,
-                                style: TextStyle(
-                                    fontSize: (screenWidth * 0.020),
-                                    color: const Color(0xFFFCA772)),
-                              )
-                            ],
+                    );
+                  },
+                  child: Container(
+                    margin:
+                        EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+                    height: screenHeigth * 0.45,
+                    width: screenWidth * 0.45,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
+                        color: Colors.lime),
+                    child: Stack(
+                      fit: StackFit.expand,
+                      children: <Widget>[
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(30),
+                          child: Image.network(
+                            placesList[0].photo,
+                            fit: BoxFit.fill,
                           ),
                         ),
-                      ),
-                    ],
+                        Positioned(
+                          left: screenWidth * 0.02,
+                          right: screenWidth * 0.02,
+                          bottom: screenHeigth * 0.01,
+                          child: Container(
+                            padding: EdgeInsets.only(
+                                left: screenWidth * 0.04,
+                                right: screenWidth * 0.02,
+                                top: screenHeigth * 0.01,
+                                bottom: screenHeigth * 0.01),
+                            width: screenWidth,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(15)),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  placesList[1].name + ' ',
+                                  style: TextStyle(
+                                      overflow: TextOverflow.ellipsis,
+                                      fontSize: (screenWidth * 0.029),
+                                      color: const Color(0xFF033236)),
+                                ),
+                                Text(
+                                  placesList[1].address,
+                                  style: TextStyle(
+                                      fontSize: (screenWidth * 0.020),
+                                      color: const Color(0xFFFCA772)),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Container(
-                      padding: EdgeInsets.only(right: screenWidth * 0.05),
-                      width: screenWidth * 0.45,
-                      height: screenHeigth * 0.22,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30)),
-                      child: Stack(
-                        fit: StackFit.expand,
-                        children: [
-                          ClipRRect(
-                              borderRadius: BorderRadius.circular(30),
-                              child: Image.network(
-                                placesList[1].photo,
-                                fit: BoxFit.fill,
-                              )),
-                          Positioned(
-                            left: screenWidth * 0.02,
-                            right: screenWidth * 0.02,
-                            bottom: screenHeigth * 0.01,
-                            child: Container(
-                              padding: EdgeInsets.only(
-                                  left: screenWidth * 0.04,
-                                  right: screenWidth * 0.02,
-                                  top: screenHeigth * 0.01,
-                                  bottom: screenHeigth * 0.01),
-                              width: screenWidth,
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(15)),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    placesList[1].name + ' ',
-                                    style: TextStyle(
-                                        overflow: TextOverflow.ellipsis,
-                                        fontSize: (screenWidth * 0.029),
-                                        color: const Color(0xFF033236)),
-                                  ),
-                                  Text(
-                                    placesList[1].address,
-                                    style: TextStyle(
-                                        fontSize: (screenWidth * 0.020),
-                                        color: const Color(0xFFFCA772)),
-                                  )
-                                ],
-                              ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => InfoPlaces(
+                              placeInfo: placesList[1],
                             ),
                           ),
-                        ],
+                        );
+                      },
+                      child: Container(
+                        padding: EdgeInsets.only(right: screenWidth * 0.05),
+                        width: screenWidth * 0.45,
+                        height: screenHeigth * 0.22,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(30)),
+                        child: Stack(
+                          fit: StackFit.expand,
+                          children: [
+                            ClipRRect(
+                                borderRadius: BorderRadius.circular(30),
+                                child: Image.network(
+                                  placesList[1].photo,
+                                  fit: BoxFit.fill,
+                                )),
+                            Positioned(
+                              left: screenWidth * 0.02,
+                              right: screenWidth * 0.02,
+                              bottom: screenHeigth * 0.01,
+                              child: Container(
+                                padding: EdgeInsets.only(
+                                    left: screenWidth * 0.04,
+                                    right: screenWidth * 0.02,
+                                    top: screenHeigth * 0.01,
+                                    bottom: screenHeigth * 0.01),
+                                width: screenWidth,
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(15)),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      placesList[1].name + ' ',
+                                      style: TextStyle(
+                                          overflow: TextOverflow.ellipsis,
+                                          fontSize: (screenWidth * 0.029),
+                                          color: const Color(0xFF033236)),
+                                    ),
+                                    Text(
+                                      placesList[1].address,
+                                      style: TextStyle(
+                                          fontSize: (screenWidth * 0.020),
+                                          color: const Color(0xFFFCA772)),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     panelDeInformacion(),
@@ -394,55 +439,67 @@ class _ViewMainState extends State<ViewMain> {
         : const SizedBox();
   }
 
-  Container panelDeInformacion() {
-    return Container(
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
-      padding: EdgeInsets.only(right: screenWidth * 0.05),
-      width: screenWidth * 0.45,
-      height: screenHeigth * 0.22,
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          ClipRRect(
-              borderRadius: BorderRadius.circular(30),
-              child: Image.network(
-                placesList[2].photo,
-                fit: BoxFit.fill,
-              )),
-          Positioned(
-            left: screenWidth * 0.02,
-            right: screenWidth * 0.02,
-            bottom: screenHeigth * 0.01,
-            child: Container(
-              padding: EdgeInsets.only(
-                  left: screenWidth * 0.04,
-                  right: screenWidth * 0.02,
-                  top: screenHeigth * 0.01,
-                  bottom: screenHeigth * 0.01),
-              width: screenWidth,
-              decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(15)),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    placesList[2].name + ' ',
-                    style: TextStyle(
-                        overflow: TextOverflow.ellipsis,
-                        fontSize: (screenWidth * 0.029),
-                        color: const Color(0xFF033236)),
-                  ),
-                  Text(
-                    placesList[2].address,
-                    style: TextStyle(
-                        fontSize: (screenWidth * 0.020),
-                        color: const Color(0xFFFCA772)),
-                  )
-                ],
-              ),
+  Widget panelDeInformacion() {
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => InfoPlaces(
+              placeInfo: placesList[2],
             ),
           ),
-        ],
+        );
+      },
+      child: Container(
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
+        padding: EdgeInsets.only(right: screenWidth * 0.05),
+        width: screenWidth * 0.45,
+        height: screenHeigth * 0.22,
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            ClipRRect(
+                borderRadius: BorderRadius.circular(30),
+                child: Image.network(
+                  placesList[2].photo,
+                  fit: BoxFit.fill,
+                )),
+            Positioned(
+              left: screenWidth * 0.02,
+              right: screenWidth * 0.02,
+              bottom: screenHeigth * 0.01,
+              child: Container(
+                padding: EdgeInsets.only(
+                    left: screenWidth * 0.04,
+                    right: screenWidth * 0.02,
+                    top: screenHeigth * 0.01,
+                    bottom: screenHeigth * 0.01),
+                width: screenWidth,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15)),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      placesList[2].name + ' ',
+                      style: TextStyle(
+                          overflow: TextOverflow.ellipsis,
+                          fontSize: (screenWidth * 0.029),
+                          color: const Color(0xFF033236)),
+                    ),
+                    Text(
+                      placesList[2].address,
+                      style: TextStyle(
+                          fontSize: (screenWidth * 0.020),
+                          color: const Color(0xFFFCA772)),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

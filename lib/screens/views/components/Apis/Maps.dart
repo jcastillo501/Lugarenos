@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:lugarenos/screens/screenInfo/InfoPlaces.dart';
+import 'package:lugarenos/screens/screenInfo/infoPlaces.dart' as infoplaces;
 
 class Maps extends StatefulWidget {
   const Maps({Key? key}) : super(key: key);
@@ -14,10 +16,20 @@ class _MapsState extends State<Maps> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SizedBox(
-        child: GoogleMap(
-            onMapCreated: initController,
-            initialCameraPosition:
-                const CameraPosition(target: LatLng(-13.6574511, -69.7145414))),
+        child: Column(
+          children: [
+            GoogleMap(
+                onMapCreated: initController,
+                initialCameraPosition: const CameraPosition(
+                    target: LatLng(-13.6574511, -69.7145414))),
+            // Container(
+
+            //   child: Column(
+            //     children: [],
+            //   ),
+            // )
+          ],
+        ),
         height: 400,
         width: 300,
       ),
