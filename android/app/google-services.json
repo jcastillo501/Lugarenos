@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "481278522219",
+    "project_id": "lugarenos-49ef5",
+    "storage_bucket": "lugarenos-49ef5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:481278522219:android:589f66acfcc4828d23522e",
+        "android_client_info": {
+          "package_name": "com.example.lugarenos"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "481278522219-62oe8rsdauoonkdei7h8ln556rnb9u9n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.lugarenos",
+            "certificate_hash": "4472da11245b55ef7e2469bc9b79557c2db0e8d9"
+          }
+        },
+        {
+          "client_id": "481278522219-7j3sbp96qvjv8dpmchehtqppnkjj8pc5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXLNRKX8nf55l1-TGVOW3KwI3IIFZnpms"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "481278522219-7j3sbp96qvjv8dpmchehtqppnkjj8pc5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

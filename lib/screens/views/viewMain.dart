@@ -343,14 +343,14 @@ class _ViewMainState extends State<ViewMain> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  placesList[1].name + ' ',
+                                  placesList[0].name + ' ',
                                   style: TextStyle(
                                       overflow: TextOverflow.ellipsis,
                                       fontSize: (screenWidth * 0.029),
                                       color: const Color(0xFF033236)),
                                 ),
                                 Text(
-                                  placesList[1].address,
+                                  placesList[0].address,
                                   style: TextStyle(
                                       fontSize: (screenWidth * 0.020),
                                       color: const Color(0xFFFCA772)),
