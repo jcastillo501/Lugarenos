@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:lugarenos/screens/login/components/loginScreen.dart';
 import 'package:lugarenos/screens/views/components/Apis/Maps.dart';
 import 'package:lugarenos/screens/views/components/Apis/place.dart';
@@ -17,7 +18,7 @@ class InfoPlaces extends StatelessWidget {
         body: SizedBox(
           height: screenHeight,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            // mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Stack(
@@ -113,7 +114,8 @@ class InfoPlaces extends StatelessWidget {
                 padding: EdgeInsets.only(
                     right: screenWidht * 0.06,
                     left: screenWidht * 0.06,
-                    top: screenHeight * 0.03),
+                    top: screenHeight * 0.03,
+                    bottom: screenHeight * 0.03),
                 child: Text(
                   placeInfo.description,
                   style: TextStyle(
@@ -123,6 +125,7 @@ class InfoPlaces extends StatelessWidget {
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
                     padding: EdgeInsets.symmetric(
@@ -151,9 +154,14 @@ class InfoPlaces extends StatelessWidget {
                       color: const Color(0xFFE4E6E6),
                     ),
                     child: GestureDetector(
-                      onTap: () {
+                      onTap: () async {
+                        await _determinePosition();
+                        print('posicion');
                         Navigator.of(context).push(
-                          MaterialPageRoute(builder: (_) => Maps()),
+                          MaterialPageRoute(
+                              builder: (_) => Maps(
+                                    placeInfo: placeInfo,
+                                  )),
                         );
                       },
                       child: Row(children: [
@@ -172,5 +180,30 @@ class InfoPlaces extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<Position> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('GPS desactivado');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Permisos de ubicacion denegados');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+          'Los permisos de ubicacion fueron denegados permanentemente');
+    } else {
+      return await Geolocator.getCurrentPosition();
+    }
   }
 }
