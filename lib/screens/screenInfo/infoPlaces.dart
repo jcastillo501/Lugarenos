@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:loading_indicator/loading_indicator.dart';
 import 'package:lugarenos/screens/login/components/loginScreen.dart';
 import 'package:lugarenos/screens/views/components/Apis/Maps.dart';
 import 'package:lugarenos/screens/views/components/Apis/place.dart';
@@ -153,24 +155,33 @@ class InfoPlaces extends StatelessWidget {
                       shape: BoxShape.rectangle,
                       color: const Color(0xFFE4E6E6),
                     ),
-                    child: GestureDetector(
-                      onTap: () async {
-                        await _determinePosition();
-                        print('posicion');
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                              builder: (_) => Maps(
-                                    placeInfo: placeInfo,
-                                  )),
-                        );
-                      },
-                      child: Row(children: [
-                        const Text(
-                          'Como llegar  ' '  ',
-                          style: TextStyle(color: Color(0xFFCCD1D1)),
-                        ),
-                        Image.asset('assets/images/Imagen 19.png')
-                      ]),
+                    child: Container(
+                      child: GestureDetector(
+                        onTap: () async {
+                          const LoadingIndicator(
+                            indicatorType: Indicator.ballBeat,
+                            colors: [Colors.blue],
+                          );
+                          Position userPosition = await _determinePosition();
+
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (_) => Maps(
+                                      userLocation: LatLng(
+                                          userPosition.latitude,
+                                          userPosition.longitude),
+                                      placeInfo: placeInfo,
+                                    )),
+                          );
+                        },
+                        child: Row(children: [
+                          const Text(
+                            'Como llegar  ' '  ',
+                            style: TextStyle(color: Color(0xFFCCD1D1)),
+                          ),
+                          Image.asset('assets/images/Imagen 19.png')
+                        ]),
+                      ),
                     ),
                   )
                 ],

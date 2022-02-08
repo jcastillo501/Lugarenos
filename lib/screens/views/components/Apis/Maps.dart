@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:lugarenos/screens/login/components/loginScreen.dart';
-import 'package:lugarenos/screens/screenInfo/InfoPlaces.dart';
 import 'package:lugarenos/screens/views/components/Apis/place.dart';
 import 'package:lugarenos/screens/views/viewMain.dart';
 
 class Maps extends StatefulWidget {
   final Place placeInfo;
+  final LatLng userLocation;
 
-  const Maps({Key? key, required this.placeInfo}) : super(key: key);
+  const Maps({Key? key, required this.placeInfo, required this.userLocation})
+      : super(key: key);
 
   @override
   _MapsState createState() => _MapsState();
@@ -17,8 +17,7 @@ class Maps extends StatefulWidget {
 
 class _MapsState extends State<Maps> {
   late GoogleMapController mapController;
-  final CameraPosition _initialPosition =
-      const CameraPosition(target: (LatLng(4.5981, -74.0799)), zoom: 10);
+
   @override
   Widget build(BuildContext context) {
     double screenWidht = MediaQuery.of(context).size.width;
@@ -32,14 +31,29 @@ class _MapsState extends State<Maps> {
               width: screenWidht,
               height: screenHeight,
               child: GoogleMap(
-                initialCameraPosition: _initialPosition,
+                initialCameraPosition:
+                    CameraPosition(target: widget.userLocation, zoom: 15),
+                markers: {
+                  Marker(
+                      markerId: const MarkerId('user'),
+                      position: widget.userLocation),
+                  Marker(
+                      markerId: const MarkerId('place'),
+                      position: widget.placeInfo.location)
+                },
+                polylines: {
+                  Polyline(
+                      polylineId: const PolylineId('route'),
+                      points: [widget.userLocation, widget.placeInfo.location],
+                      color: Colors.blue,
+                      width: 5),
+                },
                 rotateGesturesEnabled: true,
                 scrollGesturesEnabled: true,
                 tiltGesturesEnabled: true,
-                myLocationEnabled: true,
+                myLocationEnabled: false,
                 myLocationButtonEnabled: true,
                 mapType: MapType.normal,
-                // minMaxZoomPreference: MinMaxZoomPreference(9, 10),
                 onMapCreated: (GoogleMapController controller) =>
                     mapController = controller,
               ),
@@ -153,10 +167,5 @@ class _MapsState extends State<Maps> {
 
   void initController(GoogleMapController controller) {
     mapController = controller;
-  }
-
-  @override
-  void initState() {
-    super.initState();
   }
 }
