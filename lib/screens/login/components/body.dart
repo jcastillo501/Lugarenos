@@ -11,7 +11,8 @@ class Body extends StatefulWidget {
 class _BodyState extends State<Body> {
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    double screenWidht = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
     return Background(
       child: Stack(
         children: <Widget>[
@@ -20,19 +21,23 @@ class _BodyState extends State<Body> {
               right: 105,
               child: Image.asset(
                 "assets/images/fondo.png",
-                height: size.height * 0.05,
+                height: screenHeight * 0.05,
               )),
           const Positioned(
               top: 350,
               right: 100,
-              child: Text('Ingresa con tu numero de telefono')),
+              child: Text('Ingresa con tu email y contraseña')),
           Container(
             margin: const EdgeInsets.only(top: 450),
             child: Column(
               children: [
                 const TextField(
                   decoration: InputDecoration(
-                      icon: Icon(Icons.phone_android), hintText: '+57'),
+                      icon: Icon(Icons.mail_outline), hintText: 'email'),
+                ),
+                const TextField(
+                  decoration: InputDecoration(
+                      icon: Icon(Icons.mail_outline), hintText: 'password'),
                 ),
                 Container(
                   padding: EdgeInsets.all(40),

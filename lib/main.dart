@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:lugarenos/screens/screenInfo/infoPlaces.dart';
 import 'package:lugarenos/screens/views/components/Apis/place.dart';
@@ -8,9 +10,8 @@ void main() => runApp(MyApp());
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      // theme: ThemeData(fontFamily: 'AmazingSlabTrial-Bold'),
       title: 'Lugareños',
       home: ViewMain(),
     );

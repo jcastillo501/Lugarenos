@@ -156,8 +156,12 @@ class InfoPlaces extends StatelessWidget {
                     child: GestureDetector(
                       onTap: () async {
                         await _determinePosition();
+                        print('posicion');
                         Navigator.of(context).push(
-                          MaterialPageRoute(builder: (_) => Maps()),
+                          MaterialPageRoute(
+                              builder: (_) => Maps(
+                                    placeInfo: placeInfo,
+                                  )),
                         );
                       },
                       child: Row(children: [
