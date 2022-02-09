@@ -158,11 +158,8 @@ class InfoPlaces extends StatelessWidget {
                     child: Container(
                       child: GestureDetector(
                         onTap: () async {
-                          const LoadingIndicator(
-                            indicatorType: Indicator.ballBeat,
-                            colors: [Colors.blue],
-                          );
                           Position userPosition = await _determinePosition();
+                          const CircularProgressIndicator();
 
                           Navigator.of(context).push(
                             MaterialPageRoute(

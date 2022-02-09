@@ -1,6 +1,8 @@
-class User {
-  final String uid;
-  final String email;
+class UserModel {
+  final String? userId;
+  final String? email;
+  final String? name;
+  final String? addres;
 
-  User(this.uid, this.email);
+  UserModel({this.userId, this.email, this.name, this.addres});
 }
