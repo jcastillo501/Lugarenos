@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:lugarenos/screens/login/components/body.dart';
 import 'package:lugarenos/screens/login/components/userModel.dart';
 
 class AuthService {
@@ -18,7 +19,7 @@ class AuthService {
 //registrarse
   Future signUpWithEmailPassword(
       {required String email,
-      required String name,
+      // required String name,
       required String password}) async {
     try {
       UserCredential cred = await _auth.createUserWithEmailAndPassword(
@@ -30,6 +31,25 @@ class AuthService {
       return null;
     }
   }
+
+  Future<bool> checkIfEmailInUse(String email) async {
+    try {
+      final list =
+          await FirebaseAuth.instance.fetchSignInMethodsForEmail(email);
+
+      if (list.isNotEmpty) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      return true;
+    }
+  }
+
+  //  Future addDates(String name, String address)async{
+  //    db.collection('users').doc('').set({name: ''})
+  //  }
 
 //iniciar
   Future signinUsingEmailPassword(String email, String pass) async {
