@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lugarenos/screens/login/components/background.dart';
 import 'package:lugarenos/screens/login/components/services/auth_service.dart';
@@ -21,6 +22,7 @@ String passwordVal = '';
 class _BodyState extends State<Body> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  FirebaseFirestore db = FirebaseFirestore.instance;
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -134,6 +136,23 @@ class _BodyState extends State<Body> {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(content: Text(_errors)));
                                 });
+
+                                await _authService.signinUsingEmailPassword(
+                                    emailVal, passwordVal);
+
+                                var firebaseUser =
+                                    FirebaseAuth.instance.currentUser;
+                                DocumentSnapshot docUser = await db
+                                    .collection('users')
+                                    .doc(firebaseUser?.uid)
+                                    .get();
+                                if (docUser.exists) {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (_) => ViewMain()));
+                                } else {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (_) => SignUp()));
+                                }
                               } else if (result == false) {
                                 _errors = "Correo DISPONIBLE";
                                 ScaffoldMessenger.of(context).showSnackBar(
@@ -141,7 +160,6 @@ class _BodyState extends State<Body> {
 
                                 await _authService.signUpWithEmailPassword(
                                     email: emailVal, password: passwordVal);
-
                                 _errors = 'creado';
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(SnackBar(

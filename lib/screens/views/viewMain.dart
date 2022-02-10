@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:lugarenos/screens/login/components/loginScreen.dart';
 import 'package:lugarenos/screens/screenInfo/InfoPlaces.dart';
 import 'package:lugarenos/screens/screenInfo/infoPlaces.dart' as infoplaces;
 import 'package:lugarenos/screens/views/components/Apis/place.dart';
@@ -77,7 +78,11 @@ class _ViewMainState extends State<ViewMain> {
                                         shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(10.0))),
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (_) => LoginScreen()));
+                                    },
                                     child: const Text('Iniciar Sesión')),
                               ),
                             ],

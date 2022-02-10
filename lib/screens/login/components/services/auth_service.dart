@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:lugarenos/screens/login/components/body.dart';
 import 'package:lugarenos/screens/login/components/userModel.dart';
 
@@ -10,11 +12,11 @@ class AuthService {
         userId: user.uid, email: user.email, name: user.displayName);
   }
 
-  Stream<UserModel?> get user {
-    return _auth
-        .authStateChanges()
-        .map((User? user) => _userFromFirebase(user!));
-  }
+  // UserModel? get user {
+  //   return _auth
+  //       .authStateChanges()
+  //       .map((User? user) => _userFromFirebase(user!));
+  // }
 
 //registrarse
   Future signUpWithEmailPassword(
@@ -46,10 +48,6 @@ class AuthService {
       return true;
     }
   }
-
-  //  Future addDates(String name, String address)async{
-  //    db.collection('users').doc('').set({name: ''})
-  //  }
 
 //iniciar
   Future signinUsingEmailPassword(String email, String pass) async {

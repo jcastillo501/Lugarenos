@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:lugarenos/screens/login/components/services/auth_service.dart';
 import 'package:lugarenos/screens/login/components/userModel.dart';
 import 'package:lugarenos/screens/signUp/components/background.dart';
+import 'package:lugarenos/screens/views/viewMain.dart';
 
 class Body extends StatefulWidget {
   const Body({Key? key}) : super(key: key);
@@ -122,13 +123,19 @@ class _BodyState extends State<Body> {
                       if (_formKey.currentState!.validate()) {
                         setState(() {
                           loader();
-                          var firebaseUser = FirebaseAuth.instance.currentUser;
-                          db.collection("users").doc(firebaseUser?.uid).set({
-                            "name": UserModel(name: _nameVal),
-                            "address": UserModel(addres: _addressVal),
-                          }, SetOptions(merge: true)).then(
-                              (value) => (print("Succes!")));
                         });
+                        var firebaseUser =
+                            await FirebaseAuth.instance.currentUser;
+                        await db
+                            .collection("users")
+                            .doc(firebaseUser?.uid)
+                            .set({
+                          // 'id': UserModel(userId: firebaseUser),
+                          "name": _nameVal,
+                          "address": _addressVal,
+                        });
+                        Navigator.of(context).push(
+                            MaterialPageRoute(builder: (_) => ViewMain()));
                         _errors = "Datos Actualizados";
                         ScaffoldMessenger.of(context)
                             .showSnackBar(SnackBar(content: Text(_errors)));
