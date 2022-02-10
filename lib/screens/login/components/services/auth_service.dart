@@ -1,7 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:lugarenos/screens/login/components/body.dart';
 import 'package:lugarenos/screens/login/components/userModel.dart';
 
 class AuthService {
@@ -12,17 +9,9 @@ class AuthService {
         userId: user.uid, email: user.email, name: user.displayName);
   }
 
-  // UserModel? get user {
-  //   return _auth
-  //       .authStateChanges()
-  //       .map((User? user) => _userFromFirebase(user!));
-  // }
-
 //registrarse
   Future signUpWithEmailPassword(
-      {required String email,
-      // required String name,
-      required String password}) async {
+      {required String email, required String password}) async {
     try {
       UserCredential cred = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
@@ -57,7 +46,6 @@ class AuthService {
       User? user = cred.user;
       return _userFromFirebase(user!);
     } catch (e) {
-      print(e.toString());
       return null;
     }
   }

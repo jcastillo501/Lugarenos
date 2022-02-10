@@ -22,6 +22,7 @@ class _MapsState extends State<Maps> {
   Widget build(BuildContext context) {
     double screenWidht = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+    List<LatLng> coorPoly = [];
 
     return SafeArea(
       child: Scaffold(
@@ -46,7 +47,7 @@ class _MapsState extends State<Maps> {
                       polylineId: const PolylineId('route'),
                       points: [widget.userLocation, widget.placeInfo.location],
                       color: Colors.blue,
-                      width: 5),
+                      width: 5)
                 },
                 rotateGesturesEnabled: true,
                 scrollGesturesEnabled: true,
