@@ -1,4 +1,5 @@
-import 'dart:js';
+import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -6,15 +7,18 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:lugarenos/screens/views/components/Apis/Maps.dart';
 import 'package:lugarenos/screens/views/components/Apis/place.dart';
 import 'package:lugarenos/screens/views/viewMain.dart';
+import 'package:http/http.dart' as http;
+import 'package:google_maps_utils/google_maps_utils.dart' as poly;
 
 class InfoPlaces extends StatelessWidget {
   final Place placeInfo;
-  const InfoPlaces({Key? key, required this.placeInfo}) : super(key: key);
-
+  InfoPlaces({Key? key, required this.placeInfo}) : super(key: key);
+  final List<LatLng> coorPoly = [];
   @override
   Widget build(BuildContext context) {
     double screenWidht = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+
     return SafeArea(
       child: Scaffold(
         body: SizedBox(
@@ -158,6 +162,11 @@ class InfoPlaces extends StatelessWidget {
                       child: GestureDetector(
                         onTap: () async {
                           Position userPosition = await _determinePosition();
+                          await getRoute(
+                              LatLng(userPosition.latitude,
+                                  userPosition.longitude),
+                              placeInfo.location);
+
                           Navigator.of(context).push(
                             MaterialPageRoute(
                                 builder: (_) => Maps(
@@ -165,6 +174,7 @@ class InfoPlaces extends StatelessWidget {
                                           userPosition.latitude,
                                           userPosition.longitude),
                                       placeInfo: placeInfo,
+                                      pointcoor: coorPoly,
                                     )),
                           );
                         },
@@ -212,7 +222,17 @@ class InfoPlaces extends StatelessWidget {
     }
   }
 
-  Future loader() async {
-    bool _isLoading = false;
+  Future<void> getRoute(LatLng origen, LatLng destino) async {
+    Uri url = Uri.parse(
+        'https://maps.googleapis.com/maps/api/directions/json?origin=${origen.latitude},${origen.longitude}&destination=${destino.latitude},${destino.longitude},&key=AIzaSyAf3_8-gLVLSQhx_CvOuA_h1-i69BSTQjE');
+    http.Response res = await http.get(url);
+    Map dats = jsonDecode(res.body);
+
+    var overViewpoly = dats['routes'][0]["overview_polyline"]["points"];
+    List<Point<num>> mypoints = poly.PolyUtils.decode(overViewpoly);
+    print(mypoints);
+    for (Point<num> point in mypoints) {
+      coorPoly.add(LatLng(point.x.toDouble(), point.y.toDouble()));
+    }
   }
 }

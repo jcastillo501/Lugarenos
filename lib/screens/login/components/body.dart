@@ -132,7 +132,7 @@ class _BodyState extends State<Body> {
                                   .checkIfEmailInUse(emailVal);
                               if (result == true) {
                                 setState(() {
-                                  _errors = "Correo en uso";
+                                  _errors = "Sesion iniciada";
                                   ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(content: Text(_errors)));
                                 });

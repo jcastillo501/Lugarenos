@@ -2,11 +2,11 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:lugarenos/screens/login/components/loginScreen.dart';
 import 'package:lugarenos/screens/screenInfo/InfoPlaces.dart';
 import 'package:lugarenos/screens/views/components/Apis/place.dart';
+import 'package:lugarenos/screens/views/components/addPlaces.dart';
 
 class ViewMain extends StatefulWidget {
   const ViewMain({Key? key}) : super(key: key);
@@ -17,7 +17,7 @@ class ViewMain extends StatefulWidget {
 
 class _ViewMainState extends State<ViewMain> {
   List<Place> placesList = [];
-  List<LatLng> coor = <LatLng>[];
+
   late double screenHeigth;
   late double screenWidth;
   bool firstEnter = false;
@@ -208,10 +208,18 @@ class _ViewMainState extends State<ViewMain> {
                         ),
                       ),
                       GestureDetector(
-                        onTap: () {
+                        onTap: () async {
                           categorySelected = 'Ubicacion';
+                          await getCategoriesUbication();
                         },
                         child: Container(
+                          height: screenHeigth * 0.04,
+                          width: screenWidth * 0.25,
+                          decoration: BoxDecoration(
+                              color: categorySelected == 'Ubicacion'
+                                  ? Colors.amber
+                                  : Colors.white,
+                              borderRadius: BorderRadius.circular(15)),
                           child: Row(
                             children: [
                               const Text(
@@ -240,10 +248,20 @@ class _ViewMainState extends State<ViewMain> {
                         color: const Color(0xFF033236)),
                   ),
                 ),
+
                 //-------------------------------------------------//
                 //Container de imagenes destacadas**
                 //------------------------------------------------//
                 buildPopularPlaces(),
+
+                Positioned(
+                    child: TextButton(
+                  onPressed: () {
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (_) => Addplaces()));
+                  },
+                  child: Icon(Icons.exposure_plus_2),
+                )),
 
                 Padding(
                   padding: EdgeInsets.symmetric(
@@ -574,7 +592,7 @@ class _ViewMainState extends State<ViewMain> {
       Map<String, dynamic> decoded = jsonDecode(response.body);
 
       for (Map<String, dynamic> item in decoded['places']) {
-        Place dt = Place.fromMap(item);
+        Place dt = Place.fromMap(item, 0);
         placesList.add(dt);
       }
 
@@ -595,7 +613,40 @@ class _ViewMainState extends State<ViewMain> {
     setState(() {});
   }
 
-  Future<void> getCategoriesUbication() async {}
+  Future<Position> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('GPS desactivado');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Permisos de ubicacion denegados');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+          'Los permisos de ubicacion fueron denegados permanentemente');
+    } else {
+      return await Geolocator.getCurrentPosition();
+    }
+  }
+
+  Future<void> getCategoriesUbication() async {
+    Position position = await _determinePosition();
+    for (Place item in placesList) {
+      item.distance = Geolocator.distanceBetween(position.latitude,
+          position.longitude, item.location.latitude, item.location.longitude);
+    }
+    placesList.sort((a, b) => a.distance.compareTo(b.distance));
+    setState(() {});
+  }
 
   @override
   void didChangeDependencies() async {
