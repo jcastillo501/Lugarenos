@@ -1,9 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:lugarenos/screens/login/components/loginScreen.dart';
 import 'package:lugarenos/screens/screenInfo/InfoPlaces.dart';
-import 'package:lugarenos/screens/screenInfo/infoPlaces.dart' as infoplaces;
 import 'package:lugarenos/screens/views/components/Apis/place.dart';
 
 class ViewMain extends StatefulWidget {
@@ -15,15 +17,16 @@ class ViewMain extends StatefulWidget {
 
 class _ViewMainState extends State<ViewMain> {
   List<Place> placesList = [];
+  List<LatLng> coor = <LatLng>[];
   late double screenHeigth;
   late double screenWidth;
   bool firstEnter = false;
-
+  String categorySelected = 'Calificación';
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: Container(
+        body: SizedBox(
           // margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
           width: screenWidth,
           height: screenHeigth,
@@ -77,7 +80,11 @@ class _ViewMainState extends State<ViewMain> {
                                         shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(10.0))),
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (_) => LoginScreen()));
+                                    },
                                     child: const Text('Iniciar Sesión')),
                               ),
                             ],
@@ -147,19 +154,74 @@ class _ViewMainState extends State<ViewMain> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
-                      const Text(
-                        'Hoteles',
-                        style: TextStyle(color: Color(0xFFC1CDCE)),
+                      GestureDetector(
+                        onTap: () {
+                          categorySelected = 'Hoteles';
+                          getCategoriesHotels();
+                        },
+                        child: Container(
+                          height: screenHeigth * 0.04,
+                          width: screenWidth * 0.25,
+                          decoration: BoxDecoration(
+                              color: categorySelected == 'Hoteles'
+                                  ? Colors.amber
+                                  : Colors.white,
+                              borderRadius: BorderRadius.circular(15)),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              const Text(
+                                'Hoteles ',
+                                style: TextStyle(color: Color(0xFFC1CDCE)),
+                              ),
+                              Image.asset('assets/images/Imagen 5.png'),
+                            ],
+                          ),
+                        ),
                       ),
-                      Image.asset('assets/images/Imagen 5.png'),
-                      const Text(
-                        'Clasificación',
-                        style: TextStyle(color: Color(0xFFC1CDCE)),
+                      GestureDetector(
+                        onTap: () {
+                          categorySelected = 'Calificación';
+                          getCategoriesClasificacion();
+                        },
+                        child: Container(
+                          height: screenHeigth * 0.04,
+                          width: screenWidth * 0.25,
+                          decoration: BoxDecoration(
+                              color: categorySelected == 'Calificación'
+                                  ? Colors.amber
+                                  : Colors.white,
+                              borderRadius: BorderRadius.circular(15)),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Text(
+                                'Calificación ',
+                                style: TextStyle(
+                                    color: categorySelected == 'Calificación'
+                                        ? Colors.white
+                                        : Color(0xFFC1CDCE)),
+                              ),
+                              Image.asset('assets/images/Imagen 6.png'),
+                            ],
+                          ),
+                        ),
                       ),
-                      Image.asset('assets/images/Imagen 6.png'),
-                      const Text(
-                        'Ubicacion',
-                        style: TextStyle(color: Color(0xFFC1CDCE)),
+                      GestureDetector(
+                        onTap: () {
+                          categorySelected = 'Ubicacion';
+                        },
+                        child: Container(
+                          child: Row(
+                            children: [
+                              const Text(
+                                'Ubicacion ',
+                                style: TextStyle(color: Color(0xFFC1CDCE)),
+                              ),
+                              Image.asset('assets/images/Imagen 19.png')
+                            ],
+                          ),
+                        ),
                       )
                     ],
                   ),
@@ -195,7 +257,7 @@ class _ViewMainState extends State<ViewMain> {
                   ),
                 ),
 
-                Container(
+                SizedBox(
                   // color: Colors.blue,
                   height: screenHeigth * 0.40,
                   width: screenWidth,
@@ -522,6 +584,18 @@ class _ViewMainState extends State<ViewMain> {
       print('upps');
     }
   }
+
+  Future<void> getCategoriesHotels() async {
+    placesList.sort((a, b) => b.category.compareTo(a.category));
+    setState(() {});
+  }
+
+  Future<void> getCategoriesClasificacion() async {
+    placesList.sort((a, b) => b.rate.compareTo(a.rate));
+    setState(() {});
+  }
+
+  Future<void> getCategoriesUbication() async {}
 
   @override
   void didChangeDependencies() async {

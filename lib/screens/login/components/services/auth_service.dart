@@ -9,17 +9,9 @@ class AuthService {
         userId: user.uid, email: user.email, name: user.displayName);
   }
 
-  Stream<UserModel?> get user {
-    return _auth
-        .authStateChanges()
-        .map((User? user) => _userFromFirebase(user!));
-  }
-
 //registrarse
   Future signUpWithEmailPassword(
-      {required String email,
-      required String name,
-      required String password}) async {
+      {required String email, required String password}) async {
     try {
       UserCredential cred = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
@@ -31,6 +23,21 @@ class AuthService {
     }
   }
 
+  Future<bool> checkIfEmailInUse(String email) async {
+    try {
+      final list =
+          await FirebaseAuth.instance.fetchSignInMethodsForEmail(email);
+
+      if (list.isNotEmpty) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      return true;
+    }
+  }
+
 //iniciar
   Future signinUsingEmailPassword(String email, String pass) async {
     try {
@@ -39,7 +46,6 @@ class AuthService {
       User? user = cred.user;
       return _userFromFirebase(user!);
     } catch (e) {
-      print(e.toString());
       return null;
     }
   }

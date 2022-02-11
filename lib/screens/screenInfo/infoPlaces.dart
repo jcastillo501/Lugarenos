@@ -1,8 +1,8 @@
+import 'dart:js';
+
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:loading_indicator/loading_indicator.dart';
-import 'package:lugarenos/screens/login/components/loginScreen.dart';
 import 'package:lugarenos/screens/views/components/Apis/Maps.dart';
 import 'package:lugarenos/screens/views/components/Apis/place.dart';
 import 'package:lugarenos/screens/views/viewMain.dart';
@@ -73,9 +73,8 @@ class InfoPlaces extends StatelessWidget {
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10.0))),
                             onPressed: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                    builder: (_) => const LoginScreen()),
+                              Navigator.of(context).pushReplacementNamed(
+                                'LoginScreen',
                               );
                             },
                             child: const Text('Iniciar Sesión')),
@@ -159,8 +158,6 @@ class InfoPlaces extends StatelessWidget {
                       child: GestureDetector(
                         onTap: () async {
                           Position userPosition = await _determinePosition();
-                          const CircularProgressIndicator();
-
                           Navigator.of(context).push(
                             MaterialPageRoute(
                                 builder: (_) => Maps(
@@ -213,5 +210,9 @@ class InfoPlaces extends StatelessWidget {
     } else {
       return await Geolocator.getCurrentPosition();
     }
+  }
+
+  Future loader() async {
+    bool _isLoading = false;
   }
 }

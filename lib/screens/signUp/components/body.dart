@@ -1,6 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lugarenos/screens/login/components/services/auth_service.dart';
+import 'package:lugarenos/screens/login/components/userModel.dart';
 import 'package:lugarenos/screens/signUp/components/background.dart';
+import 'package:lugarenos/screens/views/viewMain.dart';
 
 class Body extends StatefulWidget {
   const Body({Key? key}) : super(key: key);
@@ -12,16 +16,17 @@ class Body extends StatefulWidget {
 class _BodyState extends State<Body> {
   final AuthService _authService = AuthService();
   final _formKey = GlobalKey<FormState>();
+  FirebaseFirestore db = FirebaseFirestore.instance;
 
   String _errors = "";
   String _nameVal = "";
-  String _emailVal = "";
-  String _adrresVal = "";
+  String _addressVal = "";
 
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+    UserModel();
 
     return Background(
         child: Stack(
@@ -60,8 +65,8 @@ class _BodyState extends State<Body> {
                   child: TextFormField(
                       keyboardType: TextInputType.text,
                       decoration: const InputDecoration(
-                        icon: Icon(Icons.person),
-                      ),
+                          icon: Icon(Icons.person),
+                          hintText: 'Nombre completo'),
                       onChanged: (val) {
                         setState(() {
                           _nameVal = val;
@@ -87,11 +92,13 @@ class _BodyState extends State<Body> {
                   child: TextFormField(
                       keyboardType: TextInputType.text,
                       decoration: const InputDecoration(
-                        icon: Icon(Icons.vpn_key),
-                      ),
+                          icon: Icon(
+                            Icons.location_city_rounded,
+                          ),
+                          hintText: ('Dirección')),
                       onChanged: (val) {
                         setState(() {
-                          _adrresVal = val;
+                          _addressVal = val;
                         });
                       },
                       validator: (val) {
@@ -117,6 +124,21 @@ class _BodyState extends State<Body> {
                         setState(() {
                           loader();
                         });
+                        var firebaseUser =
+                            await FirebaseAuth.instance.currentUser;
+                        await db
+                            .collection("users")
+                            .doc(firebaseUser?.uid)
+                            .set({
+                          // 'id': UserModel(userId: firebaseUser),
+                          "name": _nameVal,
+                          "address": _addressVal,
+                        });
+                        Navigator.of(context).push(
+                            MaterialPageRoute(builder: (_) => ViewMain()));
+                        _errors = "Datos Actualizados";
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(SnackBar(content: Text(_errors)));
                       }
                     },
                     child: const Text(
