@@ -1,4 +1,7 @@
+// ignore_for_file: use_full_hex_values_for_flutter_colors
+
 import 'package:flutter/material.dart';
+import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 
 class Addplaces extends StatefulWidget {
@@ -9,11 +12,9 @@ class Addplaces extends StatefulWidget {
 }
 
 class _AddplacesState extends State<Addplaces> {
-  @override
-  var _image;
-
+  File? _image;
   final _picker = ImagePicker();
-
+  @override
   Widget build(BuildContext context) {
     double screenWidht = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
@@ -23,29 +24,37 @@ class _AddplacesState extends State<Addplaces> {
           padding: EdgeInsets.symmetric(
               vertical: screenHeight * 0.02, horizontal: screenWidht * 0.07),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               GestureDetector(
-                onTap: () {
-                  addImage();
-                  _image != Image.file(_image);
+                onTap: () async {
+                  // ignore: unrelated_type_equality_checks
+                  // _image != Image.file(_image!);
+                  await addImage();
                 },
                 child: Container(
                   height: screenHeight * 0.3,
+                  width: screenWidht * 0.9,
+
                   decoration: const BoxDecoration(
                     color: Color(0xFFF4F9FA),
                     boxShadow: [
                       BoxShadow(
-                          color: Color(0xFF8585851C),
-                          spreadRadius: 5,
-                          blurRadius: 7,
-                          offset: Offset(0, 3))
+                        color: Color(0xFF8585851C),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                        offset: Offset(0, 3),
+                      ),
                     ],
                   ),
-                  child: const Card(
-                    child: Center(
-                      child: Text('Agregar una imagen'),
-                    ),
+                  // ignore: unnecessary_null_comparison
+                  child: Card(
+                    child: _image != null
+                        ? Image.file(
+                            _image!,
+                            fit: BoxFit.fill,
+                          )
+                        : const Center(child: Text('Agregar una imagen')),
                   ),
                 ),
               ),
@@ -54,7 +63,7 @@ class _AddplacesState extends State<Addplaces> {
                 height: screenHeight * 0.06,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: Color(0xFFF4F9FA),
+                  color: const Color(0xFFF4F9FA),
                   boxShadow: const [
                     BoxShadow(
                         color: Color(0xFF8585851C),
@@ -77,6 +86,7 @@ class _AddplacesState extends State<Addplaces> {
                       borderRadius: BorderRadius.circular(10),
                       boxShadow: const [
                         BoxShadow(
+                            // ignore: use_full_hex_values_for_flutter_colors
                             color: Color(0xFF8585851C),
                             spreadRadius: 5,
                             blurRadius: 7,
@@ -85,7 +95,7 @@ class _AddplacesState extends State<Addplaces> {
                     ),
                     child: Row(
                       children: [
-                        Text('    Hoteles   '),
+                        const Text('    Hoteles   '),
                         Image.asset('assets/images/Imagen 5.png')
                       ],
                     ),
@@ -98,6 +108,7 @@ class _AddplacesState extends State<Addplaces> {
                       borderRadius: BorderRadius.circular(10),
                       boxShadow: const [
                         BoxShadow(
+                            // ignore: use_full_hex_values_for_flutter_colors
                             color: Color(0xFF8585851C),
                             spreadRadius: 5,
                             blurRadius: 7,
@@ -106,7 +117,7 @@ class _AddplacesState extends State<Addplaces> {
                     ),
                     child: Row(
                       children: [
-                        Text('    Turistico   '),
+                        const Text('    Turistico   '),
                         Image.asset('assets/images/Imagen 22.png')
                       ],
                     ),
@@ -189,12 +200,12 @@ class _AddplacesState extends State<Addplaces> {
   Future addImage() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
 
-    setState(() {
-      if (pickedFile != null) {
-        _image = XFile(pickedFile.path);
-      } else {
-        print('imagen no seleccionada');
-      }
-    });
+    if (pickedFile != null) {
+      _image = File(pickedFile.path);
+      print('su imagen seleccionada fue' + _image!.path);
+    } else {
+      print('imagen no seleccionada');
+    }
+    setState(() {});
   }
 }

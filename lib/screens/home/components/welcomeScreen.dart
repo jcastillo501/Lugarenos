@@ -1,7 +1,4 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:lugarenos/screens/home/components/body.dart';
 import 'package:lugarenos/screens/views/viewMain.dart';
@@ -16,7 +13,7 @@ class WelcomeScreen extends StatefulWidget {
 class _WelcomeScreenState extends State<WelcomeScreen>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller = AnimationController(
-    duration: Duration(seconds: 1),
+    duration: const Duration(seconds: 1),
     vsync: this,
   )..repeat(reverse: true);
   late final Animation<Offset> _offsetAnimation = Tween<Offset>(
@@ -38,16 +35,16 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     super.initState();
 
     Timer(
-        Duration(seconds: 2),
+        const Duration(seconds: 2),
         () => Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => ViewMain())));
+            context, MaterialPageRoute(builder: (_) => const ViewMain())));
   }
 
   @override
   Widget build(BuildContext context) {
     return SlideTransition(
       position: _offsetAnimation,
-      child: Scaffold(
+      child: const Scaffold(
         body: Body(),
       ),
     );

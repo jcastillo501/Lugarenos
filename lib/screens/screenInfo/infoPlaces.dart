@@ -1,4 +1,7 @@
+// ignore_for_file: avoid_unnecessary_containers
+
 import 'dart:convert';
+
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -16,6 +19,15 @@ class InfoPlaces extends StatelessWidget {
   final List<LatLng> coorPoly = [];
   @override
   Widget build(BuildContext context) {
+    Future loader() async {
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => const Center(
+                child: CircularProgressIndicator(),
+              ));
+    }
+
     double screenWidht = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
@@ -161,6 +173,7 @@ class InfoPlaces extends StatelessWidget {
                     child: Container(
                       child: GestureDetector(
                         onTap: () async {
+                          loader();
                           Position userPosition = await _determinePosition();
                           await getRoute(
                               LatLng(userPosition.latitude,

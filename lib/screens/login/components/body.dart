@@ -148,13 +148,13 @@ class _BodyState extends State<Body> {
                                     .get();
                                 if (docUser.exists) {
                                   Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (_) => ViewMain()));
+                                      builder: (_) => const ViewMain()));
                                 } else {
                                   Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (_) => SignUp()));
+                                      builder: (_) => const SignUp()));
                                 }
                               } else if (result == false) {
-                                _errors = "Correo DISPONIBLE";
+                                _errors = "Correo disponible";
                                 ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(content: Text(_errors)));
 
@@ -179,7 +179,7 @@ class _BodyState extends State<Body> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(top: screenHeight * 0.01),
+                        padding: EdgeInsets.only(top: screenHeight * 0.02),
                         child: const Text(
                           'Tambien puedes',
                           style: TextStyle(
@@ -192,10 +192,15 @@ class _BodyState extends State<Body> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: const [
-                            Icon(Icons.facebook),
+                            Icon(
+                              Icons.facebook,
+                              size: 30,
+                              color: Colors.blue,
+                            ),
                             Text('   '),
                             Icon(
                               Icons.g_mobiledata_rounded,
+                              size: 50,
                               color: Colors.red,
                             )
                           ],

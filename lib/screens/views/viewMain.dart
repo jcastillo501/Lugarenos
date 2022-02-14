@@ -39,7 +39,7 @@ class _ViewMainState extends State<ViewMain> {
                   decoration: const BoxDecoration(
                     borderRadius:
                         BorderRadius.only(bottomLeft: Radius.circular(50)),
-                    color: Color(0x382D31E9),
+                    color: Color(0xFFF4F9FA),
                   ),
                   alignment: Alignment.center,
                   height: MediaQuery.of(context).size.height * 0.5,
@@ -134,12 +134,26 @@ class _ViewMainState extends State<ViewMain> {
                                   border: Border.all(color: Colors.grey),
                                   color: Colors.white),
                               padding: EdgeInsets.symmetric(
-                                  horizontal: screenWidth * 0.04),
+                                  horizontal: screenWidth * 0.0020),
                               child: TextFormField(
                                 // textAlign: TextAlign.center,
-                                decoration: const InputDecoration(
-                                    icon: Icon(
-                                  Icons.zoom_in,
+                                decoration: InputDecoration(
+                                    icon: Container(
+                                  height: screenHeigth * 0.057,
+                                  width: screenWidth * 0.14,
+                                  decoration: BoxDecoration(
+                                      color: Color(0xFFF3F2F2),
+                                      borderRadius: BorderRadius.circular(8),
+                                      boxShadow: const [
+                                        BoxShadow(
+                                            color: Color(0xFF70707029),
+                                            spreadRadius: 4,
+                                            blurRadius: 10,
+                                            offset: Offset(0, 2))
+                                      ]),
+                                  child: const Icon(
+                                    Icons.zoom_in,
+                                  ),
                                 )),
                               ),
                             )
@@ -254,14 +268,16 @@ class _ViewMainState extends State<ViewMain> {
                 //------------------------------------------------//
                 buildPopularPlaces(),
 
-                Positioned(
-                    child: TextButton(
-                  onPressed: () {
-                    Navigator.of(context)
-                        .push(MaterialPageRoute(builder: (_) => Addplaces()));
-                  },
-                  child: Icon(Icons.exposure_plus_2),
-                )),
+                Center(
+                  child: Positioned(
+                      child: TextButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder: (_) => const Addplaces()));
+                    },
+                    child: const Icon(Icons.add_circle_outlined, size: 30),
+                  )),
+                ),
 
                 Padding(
                   padding: EdgeInsets.symmetric(
