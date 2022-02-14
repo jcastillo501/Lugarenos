@@ -2,11 +2,11 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:lugarenos/screens/login/components/loginScreen.dart';
 import 'package:lugarenos/screens/screenInfo/InfoPlaces.dart';
 import 'package:lugarenos/screens/views/components/Apis/place.dart';
+import 'package:lugarenos/screens/views/components/addPlaces.dart';
 
 class ViewMain extends StatefulWidget {
   const ViewMain({Key? key}) : super(key: key);
@@ -17,7 +17,7 @@ class ViewMain extends StatefulWidget {
 
 class _ViewMainState extends State<ViewMain> {
   List<Place> placesList = [];
-  List<LatLng> coor = <LatLng>[];
+
   late double screenHeigth;
   late double screenWidth;
   bool firstEnter = false;
@@ -39,7 +39,7 @@ class _ViewMainState extends State<ViewMain> {
                   decoration: const BoxDecoration(
                     borderRadius:
                         BorderRadius.only(bottomLeft: Radius.circular(50)),
-                    color: Color(0x382D31E9),
+                    color: Color(0xFFF4F9FA),
                   ),
                   alignment: Alignment.center,
                   height: MediaQuery.of(context).size.height * 0.5,
@@ -134,12 +134,26 @@ class _ViewMainState extends State<ViewMain> {
                                   border: Border.all(color: Colors.grey),
                                   color: Colors.white),
                               padding: EdgeInsets.symmetric(
-                                  horizontal: screenWidth * 0.04),
+                                  horizontal: screenWidth * 0.0020),
                               child: TextFormField(
                                 // textAlign: TextAlign.center,
-                                decoration: const InputDecoration(
-                                    icon: Icon(
-                                  Icons.zoom_in,
+                                decoration: InputDecoration(
+                                    icon: Container(
+                                  height: screenHeigth * 0.057,
+                                  width: screenWidth * 0.14,
+                                  decoration: BoxDecoration(
+                                      color: Color(0xFFF3F2F2),
+                                      borderRadius: BorderRadius.circular(8),
+                                      boxShadow: const [
+                                        BoxShadow(
+                                            color: Color(0xFF70707029),
+                                            spreadRadius: 4,
+                                            blurRadius: 10,
+                                            offset: Offset(0, 2))
+                                      ]),
+                                  child: const Icon(
+                                    Icons.zoom_in,
+                                  ),
                                 )),
                               ),
                             )
@@ -208,10 +222,18 @@ class _ViewMainState extends State<ViewMain> {
                         ),
                       ),
                       GestureDetector(
-                        onTap: () {
+                        onTap: () async {
                           categorySelected = 'Ubicacion';
+                          await getCategoriesUbication();
                         },
                         child: Container(
+                          height: screenHeigth * 0.04,
+                          width: screenWidth * 0.25,
+                          decoration: BoxDecoration(
+                              color: categorySelected == 'Ubicacion'
+                                  ? Colors.amber
+                                  : Colors.white,
+                              borderRadius: BorderRadius.circular(15)),
                           child: Row(
                             children: [
                               const Text(
@@ -240,10 +262,22 @@ class _ViewMainState extends State<ViewMain> {
                         color: const Color(0xFF033236)),
                   ),
                 ),
+
                 //-------------------------------------------------//
                 //Container de imagenes destacadas**
                 //------------------------------------------------//
                 buildPopularPlaces(),
+
+                Center(
+                  child: Positioned(
+                      child: TextButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder: (_) => const Addplaces()));
+                    },
+                    child: const Icon(Icons.add_circle_outlined, size: 30),
+                  )),
+                ),
 
                 Padding(
                   padding: EdgeInsets.symmetric(
@@ -574,7 +608,7 @@ class _ViewMainState extends State<ViewMain> {
       Map<String, dynamic> decoded = jsonDecode(response.body);
 
       for (Map<String, dynamic> item in decoded['places']) {
-        Place dt = Place.fromMap(item);
+        Place dt = Place.fromMap(item, 0);
         placesList.add(dt);
       }
 
@@ -595,7 +629,40 @@ class _ViewMainState extends State<ViewMain> {
     setState(() {});
   }
 
-  Future<void> getCategoriesUbication() async {}
+  Future<Position> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('GPS desactivado');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Permisos de ubicacion denegados');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+          'Los permisos de ubicacion fueron denegados permanentemente');
+    } else {
+      return await Geolocator.getCurrentPosition();
+    }
+  }
+
+  Future<void> getCategoriesUbication() async {
+    Position position = await _determinePosition();
+    for (Place item in placesList) {
+      item.distance = Geolocator.distanceBetween(position.latitude,
+          position.longitude, item.location.latitude, item.location.longitude);
+    }
+    placesList.sort((a, b) => a.distance.compareTo(b.distance));
+    setState(() {});
+  }
 
   @override
   void didChangeDependencies() async {

@@ -9,8 +9,9 @@ class Place {
   late String description;
   late String category;
   late String id;
+  late double distance;
 
-  Place.fromMap(Map<String, dynamic> map) {
+  Place.fromMap(Map<String, dynamic> map, double num) {
     photo = map['photo'];
     location =
         LatLng(map['location']['_latitude'], map['location']['_longitude']);
@@ -20,5 +21,6 @@ class Place {
     description = map['description'];
     category = map['category'];
     id = map['id'];
+    distance = num;
   }
 }

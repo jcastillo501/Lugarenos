@@ -7,8 +7,13 @@ import 'package:lugarenos/screens/views/viewMain.dart';
 class Maps extends StatefulWidget {
   final Place placeInfo;
   final LatLng userLocation;
+  final List<LatLng> pointcoor;
 
-  const Maps({Key? key, required this.placeInfo, required this.userLocation})
+  const Maps(
+      {Key? key,
+      required this.placeInfo,
+      required this.userLocation,
+      required this.pointcoor})
       : super(key: key);
 
   @override
@@ -17,12 +22,18 @@ class Maps extends StatefulWidget {
 
 class _MapsState extends State<Maps> {
   late GoogleMapController mapController;
-
   @override
   Widget build(BuildContext context) {
     double screenWidht = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    List<LatLng> coorPoly = [];
+    final Set<Polyline> _polyline = {};
+
+    _polyline.add(Polyline(
+        color: Colors.blue,
+        visible: true,
+        points: widget.pointcoor,
+        width: 5,
+        polylineId: const PolylineId("route")));
 
     return SafeArea(
       child: Scaffold(
@@ -36,19 +47,14 @@ class _MapsState extends State<Maps> {
                     CameraPosition(target: widget.userLocation, zoom: 15),
                 markers: {
                   Marker(
+                      infoWindow: const InfoWindow(title: 'tu ubicación'),
                       markerId: const MarkerId('user'),
                       position: widget.userLocation),
                   Marker(
                       markerId: const MarkerId('place'),
                       position: widget.placeInfo.location)
                 },
-                polylines: {
-                  Polyline(
-                      polylineId: const PolylineId('route'),
-                      points: [widget.userLocation, widget.placeInfo.location],
-                      color: Colors.blue,
-                      width: 5)
-                },
+                polylines: _polyline,
                 rotateGesturesEnabled: true,
                 scrollGesturesEnabled: true,
                 tiltGesturesEnabled: true,
