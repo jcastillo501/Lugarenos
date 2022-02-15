@@ -7,6 +7,7 @@ import 'package:lugarenos/screens/login/components/loginScreen.dart';
 import 'package:lugarenos/screens/screenInfo/InfoPlaces.dart';
 import 'package:lugarenos/screens/views/components/Apis/place.dart';
 import 'package:lugarenos/screens/views/components/addPlaces.dart';
+import 'package:lugarenos/search/search_delegate.dart';
 
 class ViewMain extends StatefulWidget {
   const ViewMain({Key? key}) : super(key: key);
@@ -62,8 +63,13 @@ class _ViewMainState extends State<ViewMain> {
                               Padding(
                                 padding:
                                     EdgeInsets.only(left: screenWidth * 0.05),
-                                child: const Icon(
-                                  Icons.menu_rounded,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    lateral();
+                                  },
+                                  child: const Icon(
+                                    Icons.menu_rounded,
+                                  ),
                                 ),
                               ),
                               Padding(
@@ -131,7 +137,6 @@ class _ViewMainState extends State<ViewMain> {
                                   horizontal: screenWidth * 0.056),
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(15),
-                                  border: Border.all(color: Colors.grey),
                                   color: Colors.white),
                               padding: EdgeInsets.symmetric(
                                   horizontal: screenWidth * 0.0020),
@@ -139,10 +144,10 @@ class _ViewMainState extends State<ViewMain> {
                                 // textAlign: TextAlign.center,
                                 decoration: InputDecoration(
                                     icon: Container(
-                                  height: screenHeigth * 0.057,
+                                  height: screenHeigth * 0.055,
                                   width: screenWidth * 0.14,
                                   decoration: BoxDecoration(
-                                      color: Color(0xFFF3F2F2),
+                                      color: const Color(0xFFF3F2F2),
                                       borderRadius: BorderRadius.circular(8),
                                       boxShadow: const [
                                         BoxShadow(
@@ -151,8 +156,16 @@ class _ViewMainState extends State<ViewMain> {
                                             blurRadius: 10,
                                             offset: Offset(0, 2))
                                       ]),
-                                  child: const Icon(
-                                    Icons.zoom_in,
+                                  child: IconButton(
+                                    icon: const Icon(
+                                      Icons.zoom_in,
+                                      size: 30,
+                                    ),
+                                    onPressed: () => showSearch(
+                                        context: context,
+                                        delegate: PlaceSearchDelegate(
+                                          originalList: placesList,
+                                        )),
                                   ),
                                 )),
                               ),
@@ -268,8 +281,9 @@ class _ViewMainState extends State<ViewMain> {
                 //------------------------------------------------//
                 buildPopularPlaces(),
 
-                Center(
-                  child: Positioned(
+                Hero(
+                  tag: 'botton',
+                  child: Center(
                       child: TextButton(
                     onPressed: () {
                       Navigator.of(context).push(
@@ -620,7 +634,7 @@ class _ViewMainState extends State<ViewMain> {
   }
 
   Future<void> getCategoriesHotels() async {
-    placesList.sort((a, b) => b.category.compareTo(a.category));
+    placesList.sort((a, b) => a.category.compareTo(b.category));
     setState(() {});
   }
 
@@ -674,5 +688,33 @@ class _ViewMainState extends State<ViewMain> {
       await getPlaces();
     }
     super.didChangeDependencies();
+  }
+
+  Future loader() async {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => const Center(
+              child: CircularProgressIndicator(),
+            ));
+  }
+
+  Future lateral() async {
+    return Drawer(
+        child: ListView(
+      padding: EdgeInsets.zero,
+      children: [
+        const DrawerHeader(
+          child: Text('Mas inf'),
+          decoration: BoxDecoration(color: Colors.blue),
+        ),
+        ListTile(
+          title: const Text('Salir'),
+          onTap: () {
+            Navigator.pop(context);
+          },
+        )
+      ],
+    ));
   }
 }
