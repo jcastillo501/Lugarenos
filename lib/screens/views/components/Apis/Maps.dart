@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:lugarenos/screens/login/components/loginScreen.dart';
@@ -118,7 +120,7 @@ class _MapsState extends State<Maps> {
                               '30min',
                               style: TextStyle(
                                   fontSize: screenWidht * 0.050,
-                                  color: Color(0xFF033236)),
+                                  color: const Color(0xFF033236)),
                             )
                           ],
                         )
@@ -142,8 +144,8 @@ class _MapsState extends State<Maps> {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10.0))),
                       onPressed: () {
-                        Navigator.of(context)
-                            .pop(MaterialPageRoute(builder: (_) => ViewMain()));
+                        Navigator.of(context).pop(MaterialPageRoute(
+                            builder: (_) => const ViewMain()));
                       },
                       child: const Text(' Regresar')),
                 ),

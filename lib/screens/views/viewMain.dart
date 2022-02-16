@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, use_full_hex_values_for_flutter_colors
+
 import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -24,6 +26,7 @@ class _ViewMainState extends State<ViewMain> {
   late double screenHeigth;
   late double screenWidth;
   bool firstEnter = false;
+
   String categorySelected = 'Calificación';
   final AuthService _authService = AuthService();
   @override
@@ -89,7 +92,7 @@ class _ViewMainState extends State<ViewMain> {
                                                       BorderRadius.circular(
                                                           10.0))),
                                           onPressed: () {
-                                            Navigator.of(context).push(
+                                            Navigator.of(context).pop(
                                                 MaterialPageRoute(
                                                     builder: (_) =>
                                                         const LoginScreen()));
@@ -113,10 +116,13 @@ class _ViewMainState extends State<ViewMain> {
                                                       BorderRadius.circular(
                                                           10.0))),
                                           onPressed: () {
-                                            // loader();
+                                            // Navigator.of(context).pop(
+                                            //     MaterialPageRoute(
+                                            //         builder: (_) =>
+                                            //             const LoginScreen()));
+
                                             _authService.signout();
                                             setState(() {});
-                                            // Navigator.push()
                                           },
                                           child: const Text('Cerrar Sesion')),
                                     )
@@ -256,7 +262,7 @@ class _ViewMainState extends State<ViewMain> {
                                 style: TextStyle(
                                     color: categorySelected == 'Calificación'
                                         ? Colors.white
-                                        : Color(0xFFC1CDCE)),
+                                        : const Color(0xFFC1CDCE)),
                               ),
                               Image.asset('assets/images/Imagen 6.png'),
                             ],
@@ -320,7 +326,7 @@ class _ViewMainState extends State<ViewMain> {
                     child: const Icon(Icons.add_circle_outlined, size: 30),
                   ))
                 else
-                  SizedBox(),
+                  const SizedBox(),
 
                 Padding(
                   padding: EdgeInsets.symmetric(
@@ -431,7 +437,7 @@ class _ViewMainState extends State<ViewMain> {
 
   Widget buildPopularPlaces() {
     return (placesList.isNotEmpty)
-        ? Container(
+        ? SizedBox(
             height: screenHeigth * 0.45,
             width: screenWidth,
             child: Row(
@@ -658,6 +664,7 @@ class _ViewMainState extends State<ViewMain> {
       placesList.sort((a, b) => b.rate.compareTo(a.rate));
       setState(() {});
     } else {
+      // ignore: avoid_print
       print('upps');
     }
   }
@@ -726,24 +733,5 @@ class _ViewMainState extends State<ViewMain> {
         builder: (context) => const Center(
               child: CircularProgressIndicator(),
             ));
-  }
-
-  Future lateral() async {
-    return Drawer(
-        child: ListView(
-      padding: EdgeInsets.zero,
-      children: [
-        const DrawerHeader(
-          child: Text('Mas inf'),
-          decoration: BoxDecoration(color: Colors.blue),
-        ),
-        ListTile(
-          title: const Text('Salir'),
-          onTap: () {
-            Navigator.pop(context);
-          },
-        )
-      ],
-    ));
   }
 }

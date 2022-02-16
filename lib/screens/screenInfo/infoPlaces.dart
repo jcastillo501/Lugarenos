@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_unnecessary_containers
+// ignore_for_file: avoid_unnecessary_containers, file_names, prefer_const_constructors
 
 import 'dart:convert';
 
@@ -7,6 +7,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:lugarenos/screens/login/components/loginScreen.dart';
 import 'package:lugarenos/screens/views/components/Apis/Maps.dart';
 import 'package:lugarenos/screens/views/components/Apis/place.dart';
 import 'package:lugarenos/screens/views/viewMain.dart';
@@ -96,9 +97,8 @@ class InfoPlaces extends StatelessWidget {
                                       borderRadius:
                                           BorderRadius.circular(10.0))),
                               onPressed: () {
-                                Navigator.of(context).pushReplacementNamed(
-                                  'LoginScreen',
-                                );
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (_) => const LoginScreen()));
                               },
                               child: const Text('Iniciar Sesión')),
                         ),
@@ -251,6 +251,7 @@ class InfoPlaces extends StatelessWidget {
 
     var overViewpoly = dats['routes'][0]["overview_polyline"]["points"];
     List<Point<num>> mypoints = poly.PolyUtils.decode(overViewpoly);
+    // ignore: avoid_print
     print(mypoints);
     for (Point<num> point in mypoints) {
       coorPoly.add(LatLng(point.x.toDouble(), point.y.toDouble()));

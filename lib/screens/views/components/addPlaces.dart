@@ -1,4 +1,4 @@
-// ignore_for_file: use_full_hex_values_for_flutter_colors
+// ignore_for_file: use_full_hex_values_for_flutter_colors, file_names, duplicate_ignore
 
 import 'package:flutter/material.dart';
 import 'dart:io';
@@ -227,10 +227,7 @@ class _AddplacesState extends State<Addplaces> {
 
     if (pickedFile != null) {
       _image = File(pickedFile.path);
-      print('su imagen seleccionada fue' + _image!.path);
-    } else {
-      print('imagen no seleccionada');
-    }
+    } else {}
     setState(() {});
   }
 }

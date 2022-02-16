@@ -37,13 +37,11 @@ class PlaceSearchDelegate extends SearchDelegate {
   Widget buildSuggestions(BuildContext context) {
     List<Place> suggestionsList = [];
     if (query.isEmpty) {
-      return Container(
-        child: const Center(
-          child: Icon(
-            Icons.place_outlined,
-            color: Colors.red,
-            size: 100,
-          ),
+      return const Center(
+        child: Icon(
+          Icons.place_outlined,
+          color: Colors.red,
+          size: 100,
         ),
       );
     } else {
