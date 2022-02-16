@@ -1,9 +1,11 @@
 import 'dart:convert';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:lugarenos/screens/login/components/loginScreen.dart';
+import 'package:lugarenos/screens/login/components/services/auth_service.dart';
 import 'package:lugarenos/screens/screenInfo/InfoPlaces.dart';
 import 'package:lugarenos/screens/views/components/Apis/place.dart';
 import 'package:lugarenos/screens/views/components/addPlaces.dart';
@@ -23,6 +25,7 @@ class _ViewMainState extends State<ViewMain> {
   late double screenWidth;
   bool firstEnter = false;
   String categorySelected = 'Calificación';
+  final AuthService _authService = AuthService();
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -63,36 +66,60 @@ class _ViewMainState extends State<ViewMain> {
                               Padding(
                                 padding:
                                     EdgeInsets.only(left: screenWidth * 0.05),
-                                child: GestureDetector(
-                                  onTap: () {
-                                    lateral();
-                                  },
-                                  child: const Icon(
-                                    Icons.menu_rounded,
-                                  ),
+                                child: const Icon(
+                                  Icons.menu_rounded,
                                 ),
                               ),
-                              Padding(
-                                padding:
-                                    EdgeInsets.only(right: screenWidth * 0.05),
-                                child: TextButton(
-                                    style: TextButton.styleFrom(
-                                        backgroundColor:
-                                            MaterialStateColor.resolveWith(
-                                                (states) =>
-                                                    const Color(0xffFCA772)),
-                                        textStyle: const TextStyle(
-                                            color: Colors.white),
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10.0))),
-                                    onPressed: () {
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder: (_) => LoginScreen()));
-                                    },
-                                    child: const Text('Iniciar Sesión')),
-                              ),
+                              FirebaseAuth.instance.currentUser == null
+                                  //Iniciar sesion
+                                  ? Padding(
+                                      padding: EdgeInsets.only(
+                                          right: screenWidth * 0.05),
+                                      child: TextButton(
+                                          style: TextButton.styleFrom(
+                                              backgroundColor:
+                                                  MaterialStateColor
+                                                      .resolveWith((states) =>
+                                                          const Color(
+                                                              0xffFCA772)),
+                                              textStyle: const TextStyle(
+                                                  color: Colors.white),
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10.0))),
+                                          onPressed: () {
+                                            Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                    builder: (_) =>
+                                                        const LoginScreen()));
+                                          },
+                                          child: const Text('Iniciar Sesión')),
+                                    )
+                                  : Padding(
+                                      padding: EdgeInsets.only(
+                                          right: screenWidth * 0.05),
+                                      child: TextButton(
+                                          style: TextButton.styleFrom(
+                                              backgroundColor:
+                                                  MaterialStateColor
+                                                      .resolveWith((states) =>
+                                                          const Color(
+                                                              0xffFCA772)),
+                                              textStyle: const TextStyle(
+                                                  color: Colors.white),
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10.0))),
+                                          onPressed: () {
+                                            // loader();
+                                            _authService.signout();
+                                            setState(() {});
+                                            // Navigator.push()
+                                          },
+                                          child: const Text('Cerrar Sesion')),
+                                    )
                             ],
                           ),
                         ),
@@ -141,6 +168,8 @@ class _ViewMainState extends State<ViewMain> {
                               padding: EdgeInsets.symmetric(
                                   horizontal: screenWidth * 0.0020),
                               child: TextFormField(
+                                enableInteractiveSelection: false,
+                                // enabled: false,
                                 // textAlign: TextAlign.center,
                                 decoration: InputDecoration(
                                     icon: Container(
@@ -281,17 +310,17 @@ class _ViewMainState extends State<ViewMain> {
                 //------------------------------------------------//
                 buildPopularPlaces(),
 
-                Hero(
-                  tag: 'botton',
-                  child: Center(
+                if (FirebaseAuth.instance.currentUser != null)
+                  Center(
                       child: TextButton(
-                    onPressed: () {
+                    onPressed: () async {
                       Navigator.of(context).push(
                           MaterialPageRoute(builder: (_) => const Addplaces()));
                     },
                     child: const Icon(Icons.add_circle_outlined, size: 30),
-                  )),
-                ),
+                  ))
+                else
+                  SizedBox(),
 
                 Padding(
                   padding: EdgeInsets.symmetric(

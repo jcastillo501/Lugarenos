@@ -78,8 +78,7 @@ class InfoPlaces extends StatelessWidget {
                                           BorderRadius.circular(10.0))),
                               onPressed: () {
                                 Navigator.of(context).pop(
-                                  MaterialPageRoute(
-                                      builder: (_) => const ViewMain()),
+                                  MaterialPageRoute(builder: (_) => ViewMain()),
                                 );
                               },
                               child: const Text(' Regresar')),

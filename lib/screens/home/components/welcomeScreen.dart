@@ -37,7 +37,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     Timer(
         const Duration(seconds: 2),
         () => Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (_) => const ViewMain())));
+            context, MaterialPageRoute(builder: (_) => ViewMain())));
   }
 
   @override

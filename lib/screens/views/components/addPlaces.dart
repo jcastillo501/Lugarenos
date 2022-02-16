@@ -32,7 +32,6 @@ class _AddplacesState extends State<Addplaces> {
               children: [
                 GestureDetector(
                   onTap: () async {
-                    // ignore: unrelated_type_equality_checks
                     // _image != Image.file(_image!);
                     await addImage();
                   },
