@@ -14,7 +14,7 @@ class Body extends StatefulWidget {
 }
 
 final AuthService _authService = AuthService();
-final _formKey = GlobalKey<FormState>();
+GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 String _errors = '';
 String emailVal = '';
 String passwordVal = '';
@@ -148,7 +148,7 @@ class _BodyState extends State<Body> {
                                     .get();
                                 if (docUser.exists) {
                                   Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (_) => const ViewMain()));
+                                      builder: (_) => ViewMain()));
                                 } else {
                                   Navigator.of(context).push(MaterialPageRoute(
                                       builder: (_) => const SignUp()));

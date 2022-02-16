@@ -1,12 +1,15 @@
 import 'dart:convert';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:lugarenos/screens/login/components/loginScreen.dart';
+import 'package:lugarenos/screens/login/components/services/auth_service.dart';
 import 'package:lugarenos/screens/screenInfo/InfoPlaces.dart';
 import 'package:lugarenos/screens/views/components/Apis/place.dart';
 import 'package:lugarenos/screens/views/components/addPlaces.dart';
+import 'package:lugarenos/search/search_delegate.dart';
 
 class ViewMain extends StatefulWidget {
   const ViewMain({Key? key}) : super(key: key);
@@ -22,6 +25,7 @@ class _ViewMainState extends State<ViewMain> {
   late double screenWidth;
   bool firstEnter = false;
   String categorySelected = 'Calificación';
+  final AuthService _authService = AuthService();
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -66,27 +70,56 @@ class _ViewMainState extends State<ViewMain> {
                                   Icons.menu_rounded,
                                 ),
                               ),
-                              Padding(
-                                padding:
-                                    EdgeInsets.only(right: screenWidth * 0.05),
-                                child: TextButton(
-                                    style: TextButton.styleFrom(
-                                        backgroundColor:
-                                            MaterialStateColor.resolveWith(
-                                                (states) =>
-                                                    const Color(0xffFCA772)),
-                                        textStyle: const TextStyle(
-                                            color: Colors.white),
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10.0))),
-                                    onPressed: () {
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder: (_) => LoginScreen()));
-                                    },
-                                    child: const Text('Iniciar Sesión')),
-                              ),
+                              FirebaseAuth.instance.currentUser == null
+                                  //Iniciar sesion
+                                  ? Padding(
+                                      padding: EdgeInsets.only(
+                                          right: screenWidth * 0.05),
+                                      child: TextButton(
+                                          style: TextButton.styleFrom(
+                                              backgroundColor:
+                                                  MaterialStateColor
+                                                      .resolveWith((states) =>
+                                                          const Color(
+                                                              0xffFCA772)),
+                                              textStyle: const TextStyle(
+                                                  color: Colors.white),
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10.0))),
+                                          onPressed: () {
+                                            Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                    builder: (_) =>
+                                                        const LoginScreen()));
+                                          },
+                                          child: const Text('Iniciar Sesión')),
+                                    )
+                                  : Padding(
+                                      padding: EdgeInsets.only(
+                                          right: screenWidth * 0.05),
+                                      child: TextButton(
+                                          style: TextButton.styleFrom(
+                                              backgroundColor:
+                                                  MaterialStateColor
+                                                      .resolveWith((states) =>
+                                                          const Color(
+                                                              0xffFCA772)),
+                                              textStyle: const TextStyle(
+                                                  color: Colors.white),
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10.0))),
+                                          onPressed: () {
+                                            // loader();
+                                            _authService.signout();
+                                            setState(() {});
+                                            // Navigator.push()
+                                          },
+                                          child: const Text('Cerrar Sesion')),
+                                    )
                             ],
                           ),
                         ),
@@ -131,18 +164,19 @@ class _ViewMainState extends State<ViewMain> {
                                   horizontal: screenWidth * 0.056),
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(15),
-                                  border: Border.all(color: Colors.grey),
                                   color: Colors.white),
                               padding: EdgeInsets.symmetric(
                                   horizontal: screenWidth * 0.0020),
                               child: TextFormField(
+                                enableInteractiveSelection: false,
+                                // enabled: false,
                                 // textAlign: TextAlign.center,
                                 decoration: InputDecoration(
                                     icon: Container(
-                                  height: screenHeigth * 0.057,
+                                  height: screenHeigth * 0.055,
                                   width: screenWidth * 0.14,
                                   decoration: BoxDecoration(
-                                      color: Color(0xFFF3F2F2),
+                                      color: const Color(0xFFF3F2F2),
                                       borderRadius: BorderRadius.circular(8),
                                       boxShadow: const [
                                         BoxShadow(
@@ -151,8 +185,16 @@ class _ViewMainState extends State<ViewMain> {
                                             blurRadius: 10,
                                             offset: Offset(0, 2))
                                       ]),
-                                  child: const Icon(
-                                    Icons.zoom_in,
+                                  child: IconButton(
+                                    icon: const Icon(
+                                      Icons.zoom_in,
+                                      size: 30,
+                                    ),
+                                    onPressed: () => showSearch(
+                                        context: context,
+                                        delegate: PlaceSearchDelegate(
+                                          originalList: placesList,
+                                        )),
                                   ),
                                 )),
                               ),
@@ -268,16 +310,17 @@ class _ViewMainState extends State<ViewMain> {
                 //------------------------------------------------//
                 buildPopularPlaces(),
 
-                Center(
-                  child: Positioned(
+                if (FirebaseAuth.instance.currentUser != null)
+                  Center(
                       child: TextButton(
-                    onPressed: () {
+                    onPressed: () async {
                       Navigator.of(context).push(
                           MaterialPageRoute(builder: (_) => const Addplaces()));
                     },
                     child: const Icon(Icons.add_circle_outlined, size: 30),
-                  )),
-                ),
+                  ))
+                else
+                  SizedBox(),
 
                 Padding(
                   padding: EdgeInsets.symmetric(
@@ -620,7 +663,7 @@ class _ViewMainState extends State<ViewMain> {
   }
 
   Future<void> getCategoriesHotels() async {
-    placesList.sort((a, b) => b.category.compareTo(a.category));
+    placesList.sort((a, b) => a.category.compareTo(b.category));
     setState(() {});
   }
 
@@ -674,5 +717,33 @@ class _ViewMainState extends State<ViewMain> {
       await getPlaces();
     }
     super.didChangeDependencies();
+  }
+
+  Future loader() async {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => const Center(
+              child: CircularProgressIndicator(),
+            ));
+  }
+
+  Future lateral() async {
+    return Drawer(
+        child: ListView(
+      padding: EdgeInsets.zero,
+      children: [
+        const DrawerHeader(
+          child: Text('Mas inf'),
+          decoration: BoxDecoration(color: Colors.blue),
+        ),
+        ListTile(
+          title: const Text('Salir'),
+          onTap: () {
+            Navigator.pop(context);
+          },
+        )
+      ],
+    ));
   }
 }
