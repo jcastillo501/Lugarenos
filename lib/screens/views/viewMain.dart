@@ -116,11 +116,6 @@ class _ViewMainState extends State<ViewMain> {
                                                       BorderRadius.circular(
                                                           10.0))),
                                           onPressed: () {
-                                            // Navigator.of(context).pop(
-                                            //     MaterialPageRoute(
-                                            //         builder: (_) =>
-                                            //             const LoginScreen()));
-
                                             _authService.signout();
                                             setState(() {});
                                           },

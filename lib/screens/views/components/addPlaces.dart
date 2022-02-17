@@ -1,8 +1,10 @@
-// ignore_for_file: use_full_hex_values_for_flutter_colors, file_names, duplicate_ignore
+// ignore_for_file: use_full_hex_values_for_flutter_colors, file_names, duplicate_ignore, avoid_print
 
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:lugarenos/screens/views/components/Apis/place.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class Addplaces extends StatefulWidget {
   const Addplaces({Key? key}) : super(key: key);
@@ -14,11 +16,20 @@ class Addplaces extends StatefulWidget {
 class _AddplacesState extends State<Addplaces> {
   File? _image;
   final _picker = ImagePicker();
-  late List<Map> addingPlaces = [];
+  late Place addingPlaces;
+  final _nameController = TextEditingController();
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidht = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: true,
@@ -36,7 +47,7 @@ class _AddplacesState extends State<Addplaces> {
                     await addImage();
                   },
                   child: Container(
-                    height: screenHeight * 0.3,
+                    height: screenHeight * 0.25,
                     width: screenWidht * 0.9,
 
                     decoration: const BoxDecoration(
@@ -64,7 +75,7 @@ class _AddplacesState extends State<Addplaces> {
                 Container(
                   margin: EdgeInsets.only(top: screenHeight * 0.037),
                   width: screenWidht * 0.9,
-                  height: screenHeight * 0.06,
+                  height: screenHeight * 0.053,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     color: const Color(0xFFF4F9FA),
@@ -76,9 +87,13 @@ class _AddplacesState extends State<Addplaces> {
                           offset: Offset(0, 3))
                     ],
                   ),
-                  child: const TextField(
-                      decoration:
-                          InputDecoration(labelText: 'Nombre del lugar')),
+                  child: TextField(
+                      controller: _nameController,
+                      decoration: InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(
+                              horizontal: screenHeight * 0.03),
+                          border: InputBorder.none,
+                          hintText: 'Nombre del lugar')),
                 ),
                 Container(
                   margin: EdgeInsets.only(top: screenHeight * 0.037),
@@ -155,7 +170,7 @@ class _AddplacesState extends State<Addplaces> {
                 ),
                 Container(
                   margin: EdgeInsets.only(top: screenHeight * 0.037),
-                  height: screenHeight * 0.3,
+                  height: screenHeight * 0.25,
                   width: screenWidht * 0.9,
                   decoration: const BoxDecoration(
                     color: Color(0xFFF4F9FA),
@@ -167,7 +182,14 @@ class _AddplacesState extends State<Addplaces> {
                           offset: Offset(0, 3))
                     ],
                   ),
-                  child: const Text('Descripción'),
+                  child: const SizedBox(
+                    child: TextField(
+                      maxLines: 10,
+                      decoration: InputDecoration(
+                          hintText: 'Descripción',
+                          border: OutlineInputBorder()),
+                    ),
+                  ),
                 ),
                 Container(
                   margin: EdgeInsets.only(top: screenHeight * 0.037),
@@ -203,17 +225,15 @@ class _AddplacesState extends State<Addplaces> {
                     ),
                   ),
                 ),
-                // Hero(
-                //   tag: 'botton',
-                //   child: Center(
-                //       child: TextButton(
-                //     onPressed: () {
-                //       Navigator.of(context).pop(
-                //           MaterialPageRoute(builder: (_) => const ViewMain()));
-                //     },
-                //     child: const Icon(Icons.add_circle_outlined, size: 30),
-                //   )),
-                // ),
+                //botons de añadir "check"
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: screenHeight * 0.02),
+                  child: IconButton(
+                      onPressed: () {
+                        uploadImage();
+                      },
+                      icon: const Icon(Icons.check)),
+                )
               ],
             ),
           ),
@@ -229,5 +249,36 @@ class _AddplacesState extends State<Addplaces> {
       _image = File(pickedFile.path);
     } else {}
     setState(() {});
+  }
+
+  Future uploadImage() async {
+    String fileName = (_image!.path);
+    String? link;
+
+    firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
+        .ref()
+        .child('images')
+        .child('/$fileName');
+
+    final metada = firebase_storage.SettableMetadata(
+        contentType: 'image/jpg',
+        customMetadata: {
+          'picked-file-pacth': fileName,
+        });
+    firebase_storage.UploadTask uploadTask;
+    uploadTask = ref.putFile(File(_image!.path), metada);
+//subida de la imagen
+    firebase_storage.UploadTask task = await Future.value(uploadTask);
+    Future.value(task)
+        .then((value) => {
+              print(
+                'Subiendo el archivo ${value.ref.fullPath}',
+              )
+            })
+        .onError((error, stackTrace) => {
+              print('Fallo al subir el archivo ${error.toString()}'),
+            })
+        .then((value) async => {link = await ref.getDownloadURL()})
+        .then((value) => print('Url de descarga $link'));
   }
 }
