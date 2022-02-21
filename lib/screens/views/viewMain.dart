@@ -34,7 +34,6 @@ class _ViewMainState extends State<ViewMain> {
     return SafeArea(
       child: Scaffold(
         body: SizedBox(
-          // margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
           width: screenWidth,
           height: screenHeigth,
           child: SingleChildScrollView(
@@ -311,6 +310,7 @@ class _ViewMainState extends State<ViewMain> {
                 //------------------------------------------------//
                 buildPopularPlaces(),
 
+                //Boton agregar mas lugares
                 if (FirebaseAuth.instance.currentUser != null)
                   Center(
                       child: TextButton(
@@ -336,7 +336,6 @@ class _ViewMainState extends State<ViewMain> {
                 ),
 
                 SizedBox(
-                  // color: Colors.blue,
                   height: screenHeigth * 0.40,
                   width: screenWidth,
                   child: ListView.builder(
